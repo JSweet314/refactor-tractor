@@ -24,7 +24,7 @@ describe('Recipe', function() {
     expect(recipe.id).to.eq(595736);
   });
 
-  it('should initialize with an name', function() {
+  it('should initialize with a name', function() {
     expect(recipe.name).to.eq('Loaded Chocolate Chip Pudding Cookie Cups');
   });
 
