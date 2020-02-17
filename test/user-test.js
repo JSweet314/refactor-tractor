@@ -44,20 +44,51 @@ describe("User", function() {
   });
 
   it("should be able to save a recipe to favoriteRecipes", function() {
-    user.addFavoriteRecipe(recipe);
+    user.addRecipe(recipe, 'favoriteRecipes');
     expect(user.favoriteRecipes[0].id).to.equal(595736);
   });
 
-  it("shouldn't be able to save recipe if it has already been saved", function() {
-    user.addFavoriteRecipe(recipe);
+  it("shouldn't be able to save recipe to favorites if it has already been saved", function() {
+    user.addRecipe(recipe, 'favoriteRecipes');
     expect(user.favoriteRecipes[0].id).to.equal(595736);
-    expect(user.addFavoriteRecipe.bind(user, recipe)).to.throw(new Error('Recipe already in favorites'))
+    expect(user.addRecipe.bind(user, recipe, 'favoriteRecipes')).to.throw('Recipe already in favoriteRecipes')
     expect(user.favoriteRecipes.length).to.equal(1);
   });
 
-  it("should be able to decide to cook a recipe", function() {
-    user.decideToCook(recipe);
-    // expect(user.recipesToCook[0].name).to.equal("Chicken Parm");
+  it("should be able to add recipes to cook", function() {
+    user.addRecipe(recipe, 'recipesToCook');
+    expect(user.recipesToCook[0].id).to.equal(595736);
+  });
+
+  it("shouldn't be able to save recipe to cook it has already been saved", function() {
+    user.addRecipe(recipe, 'recipesToCook');
+    expect(user.recipesToCook[0].id).to.equal(595736);
+    expect(user.addRecipe.bind(user, recipe, 'recipesToCook')).to.throw('Recipe already in recipesToCook')
+    expect(user.recipesToCook.length).to.equal(1);
+  });
+
+  it("should be able to remove a recipe from favoriteRecipes", function() {
+    user.addRecipe(recipe, 'favoriteRecipes');
+    expect(user.favoriteRecipes[0].id).to.equal(595736);
+    user.removeRecipe(recipe, 'favoriteRecipes');
+    expect(user.favoriteRecipes.length).to.equal(0);
+  });
+
+  it("shouldn't be able to remove recipe from favorites if doesn't exist", function() {
+    expect(user.removeRecipe.bind(user, recipe, 'favoriteRecipes')).to.throw(`Recipe doesn't exist in favoriteRecipes`)
+    expect(user.favoriteRecipes.length).to.equal(0);
+  });
+
+  it("should be able to remove recipes to cook", function() {
+    user.addRecipe(recipe, 'recipesToCook');
+    expect(user.recipesToCook[0].id).to.equal(595736);
+    user.removeRecipe(recipe, 'recipesToCook');
+    expect(user.recipesToCook.length).to.equal(0);
+  });
+
+  it("shouldn't be able to remove recipe to cook if it doesn't exist", function() {
+    expect(user.removeRecipe.bind(user, recipe, 'recipesToCook')).to.throw(`Recipe doesn't exist in recipesToCook`)
+    expect(user.recipesToCook.length).to.equal(0);
   });
 
   it.skip("should be able to filter recipes by type", function() {
