@@ -7,12 +7,18 @@ import mockRecipes from "../data/mock-recipe-data";
 describe("User", function() {
   let user;
   let recipe;
+  let recipe2;
+  let recipe3;
 
   beforeEach(function() {
     const mockUser = mockUsers.wcUsersData[0];
     user = new User(mockUser);
     const mockRecipe = mockRecipes.recipeData[0];
     recipe = new Recipe(mockRecipe)
+    const mockRecipe2 = mockRecipes.recipeData[1];
+    recipe2 = new Recipe(mockRecipe2);
+    const mockRecipe3 = mockRecipes.recipeData[2];
+    recipe3 = new Recipe(mockRecipe3);
   });
 
   it("should be a function", function() {
@@ -91,9 +97,28 @@ describe("User", function() {
     expect(user.recipesToCook.length).to.equal(0);
   });
 
-  it.skip("should be able to filter recipes by type", function() {
-    user.saveRecipe(recipe);
-    expect(user.filterRecipes("italian")).to.deep.equal([recipe]);
+  it("should be able to filter favorite recipes by tag", function() {
+    user.addRecipe(recipe, 'favoriteRecipes');
+    user.addRecipe(recipe2, 'favoriteRecipes');
+    user.addRecipe(recipe3, 'favoriteRecipes');
+    expect(user.filterRecipes(['snack'], 'favoriteRecipes')).to.deep.equal([recipe, recipe3]);
+  });
+
+  it("should return an empty array if the tag doesn't match any favorite recipes", function() {
+    user.addRecipe(recipe, 'favoriteRecipes');
+    expect(user.filterRecipes(['cupcake'], 'favoriteRecipes')).to.deep.equal([]);
+  });
+
+  it("should be able to filter recipes to cook by tag", function() {
+    user.addRecipe(recipe, 'recipesToCook');
+    user.addRecipe(recipe2, 'recipesToCook');
+    user.addRecipe(recipe3, 'recipesToCook');
+    expect(user.filterRecipes(['lunch'], 'recipesToCook')).to.deep.equal([recipe2]);
+  });
+
+  it("should return an empty array if the tag doesn't match any recipes to cook", function() {
+    user.addRecipe(recipe, 'recipesToCook');
+    expect(user.filterRecipes(['italian'], 'recipesToCook')).to.deep.equal([]);
   });
 
   it.skip("should be able to search recipes by name", function() {
