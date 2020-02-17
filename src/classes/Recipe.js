@@ -7,6 +7,7 @@ class Recipe {
     this.name = recipe.name;
     this.tags = recipe.tags;
   }
+  // could pass in ingredients parameter to use globally and find cost of missing ingredients as well
   calculateCost(data) {
     const ingredientCosts = this.ingredients.map(ingredient => {
       let match = data.find(ingr => ingr.id === ingredient.id);
