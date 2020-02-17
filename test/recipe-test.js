@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import Recipe from '../src/recipe';
-import data from '../data/recipe-data';
+import Recipe from '../src/classes/Recipe';
+import mockRecipes from '../data/mock-recipe-data';
 
 describe('Recipe', function() {
   let recipe;
@@ -24,7 +24,7 @@ describe('Recipe', function() {
     expect(recipe.id).to.eq(595736);
   });
 
-  it('should initialize with an name', function() {
+  it('should initialize with a name', function() {
     expect(recipe.name).to.eq('Loaded Chocolate Chip Pudding Cookie Cups');
   });
 
