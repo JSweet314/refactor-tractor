@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import User from "../src/classes/User";
-import data from "../data/users-data";
+import mockUsers from "../data/mock-user-data";
 
 describe("User", function() {
   let user;
