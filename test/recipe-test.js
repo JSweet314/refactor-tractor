@@ -13,6 +13,7 @@ describe('Recipe', function() {
   beforeEach(function() {
     recipeInfo = mockRecipes.recipeData[0];
     recipe = new Recipe(recipeInfo);
+    ingredients = mockIngredients.ingredientsData;
   })
 
   it('is a function', function() {
@@ -87,6 +88,6 @@ describe('Recipe', function() {
   });
 
   it('should calculate the total cost of all of the ingredients', function() {
-    expect(recipe.calculateIngredientsCost()).to.eq();
+    expect(recipe.calculateCost(ingredients)).to.eq('$177.76');
   });
 });
