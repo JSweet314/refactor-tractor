@@ -3,12 +3,14 @@ import User from "../src/classes/User";
 import Recipe from "../src/classes/Recipe";
 import mockUsers from "../data/mock-user-data";
 import mockRecipes from "../data/mock-recipe-data";
+import mockIngredients from "../data/mock-ingredient-data";
 
 describe("User", function() {
   let user;
   let recipe;
   let recipe2;
   let recipe3;
+  let ingredients;
 
   beforeEach(function() {
     const mockUser = mockUsers.wcUsersData[0];
@@ -19,6 +21,7 @@ describe("User", function() {
     recipe2 = new Recipe(mockRecipe2);
     const mockRecipe3 = mockRecipes.recipeData[2];
     recipe3 = new Recipe(mockRecipe3);
+    ingredients = mockIngredients.ingredientsData;
   });
 
   it("should be a function", function() {
@@ -101,28 +104,54 @@ describe("User", function() {
     user.addRecipe(recipe, 'favoriteRecipes');
     user.addRecipe(recipe2, 'favoriteRecipes');
     user.addRecipe(recipe3, 'favoriteRecipes');
-    expect(user.filterRecipes(['snack'], 'favoriteRecipes')).to.deep.equal([recipe, recipe3]);
+    expect(user.filterRecipes(['snack'], user.favoriteRecipes)).to.deep.equal([recipe, recipe3]);
   });
 
   it("should return an empty array if the tag doesn't match any favorite recipes", function() {
     user.addRecipe(recipe, 'favoriteRecipes');
-    expect(user.filterRecipes(['cupcake'], 'favoriteRecipes')).to.deep.equal([]);
+    expect(user.filterRecipes(['cupcake'], user.favoriteRecipes)).to.deep.equal([]);
   });
 
   it("should be able to filter recipes to cook by tag", function() {
     user.addRecipe(recipe, 'recipesToCook');
     user.addRecipe(recipe2, 'recipesToCook');
     user.addRecipe(recipe3, 'recipesToCook');
-    expect(user.filterRecipes(['lunch'], 'recipesToCook')).to.deep.equal([recipe2]);
+    expect(user.filterRecipes(['lunch'], user.recipesToCook)).to.deep.equal([recipe2]);
   });
 
   it("should return an empty array if the tag doesn't match any recipes to cook", function() {
     user.addRecipe(recipe, 'recipesToCook');
-    expect(user.filterRecipes(['italian'], 'recipesToCook')).to.deep.equal([]);
+    expect(user.filterRecipes(['italian'], user.recipesToCook)).to.deep.equal([]);
   });
 
-  it.skip("should be able to search recipes by name", function() {
-    user.saveRecipe(recipe);
-    expect(user.searchForRecipe("Chicken Parm")).to.deep.equal([recipe]);
+  it("should be able to search favorite recipes by name", function() {
+    user.addRecipe(recipe, 'favoriteRecipes');
+    user.addRecipe(recipe2, 'favoriteRecipes');
+    user.addRecipe(recipe3, 'favoriteRecipes');
+    expect(user.searchRecipes(ingredients, 'chocolate', user.favoriteRecipes)).to.deep.equal([recipe]);
   });
+
+  it("should be able to search favorite recipes by ingredient", function() {
+    user.addRecipe(recipe, 'favoriteRecipes');
+    user.addRecipe(recipe2, 'favoriteRecipes');
+    user.addRecipe(recipe3, 'favoriteRecipes');
+    //16124
+    expect(user.searchRecipes(ingredients, 'soy sauce', user.favoriteRecipes)).to.deep.equal([recipe2]);
+    });
+
+  it("should be able to search recipes to cook by name", function() {
+    user.addRecipe(recipe, 'recipesToCook');
+    user.addRecipe(recipe2, 'recipesToCook');
+    user.addRecipe(recipe3, 'recipesToCook');
+    expect(user.searchRecipes(ingredients, 'dijon', user.recipesToCook)).to.deep.equal([recipe2]);
+  });
+
+  it("should be able to search recipes to cook by ingredient", function() {
+    user.addRecipe(recipe, 'recipesToCook');
+    user.addRecipe(recipe2, 'recipesToCook');
+    user.addRecipe(recipe3, 'recipesToCook');
+    // 2026
+    expect(user.searchRecipes(ingredients, 'onion powder', user.recipesToCook)).to.deep.equal([recipe3]);
+  });
+
 });
