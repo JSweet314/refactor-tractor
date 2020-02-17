@@ -90,4 +90,13 @@ describe('Recipe', function() {
   it('should calculate the total cost of all of the ingredients', function() {
     expect(recipe.calculateCost(ingredients)).to.eq('$177.76');
   });
+
+  it('should throw an error if recipe calls for an ingredient that does not exist in the database', function() {
+    ingredients = [];
+    expect(recipe.calculateCost.bind(recipe, ingredients)).to.throw('Ingredient cost not found')
+  })
+
+  it('should be able to get recipe instructions', function() {
+    expect()
+  })
 });
