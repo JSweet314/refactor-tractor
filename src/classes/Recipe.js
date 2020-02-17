@@ -10,7 +10,11 @@ class Recipe {
   calculateCost(data) {
     const ingredientCosts = this.ingredients.map(ingredient => {
       let match = data.find(ingr => ingr.id === ingredient.id);
-      return ingredient.quantity.amount * match.estimatedCostInCents;
+      if (match) {
+        return ingredient.quantity.amount * match.estimatedCostInCents;
+      } else {
+        throw new Error('Ingredient cost not found')
+      }
     })
     const totalCost = ingredientCosts.reduce((total, cost) => {
       return total + cost;
@@ -18,7 +22,6 @@ class Recipe {
     const costInDollars = totalCost / 100;
     return `$${costInDollars}`
   }
-
 }
 
 export default Recipe;
