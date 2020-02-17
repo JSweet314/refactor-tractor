@@ -8,7 +8,11 @@ class User {
   }
 
   addFavoriteRecipe(recipe) {
-
+    if (!this.favoriteRecipes.includes(recipe)) {
+      this.favoriteRecipes.push(recipe);
+    } else {
+      throw new Error('Recipe already in favorites');
+    }
   }
 
   removeFavoriteRecipe(recipe) {
