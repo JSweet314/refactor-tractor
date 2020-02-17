@@ -7,24 +7,21 @@ class User {
     this.recipesToCook = [];
   }
 
-  addFavoriteRecipe(recipe) {
-    if (!this.favoriteRecipes.includes(recipe)) {
-      this.favoriteRecipes.push(recipe);
+  addRecipe(recipe, list) {
+    if (!this[list].includes(recipe)) {
+      this[list].push(recipe);
     } else {
-      throw new Error('Recipe already in favorites');
+      throw new Error(`Recipe already in ${list}`);
     }
   }
 
-  removeFavoriteRecipe(recipe) {
-
-  }
-
-  addRecipeToCook(recipe) {
-
-  }
-
-  removeRecipeToCook(recipe) {
-
+  removeRecipe(recipe, list) {
+    if (this[list].includes(recipe)) {
+      const recipeIndex = this[list].indexOf(recipe);
+      this[list].splice(recipeIndex, 1);
+    } else {
+      throw new Error(`Recipe doesn't exist in ${list}`);
+    }
   }
 
   filterRecipes(tag) {
