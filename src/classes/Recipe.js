@@ -22,6 +22,9 @@ class Recipe {
     const costInDollars = totalCost / 100;
     return `$${costInDollars}`
   }
+  getInstructions() {
+    return this.instructions;
+  }
 }
 
 export default Recipe;
