@@ -24,12 +24,25 @@ class User {
     }
   }
 
-  filterRecipes(tag) {
-
+  filterRecipes(searchTags, list) {
+    if (!this[list].length) {
+      throw new Error(`No recipes saved to ${list}`);
+    }
+    const filtered = [];
+    this[list].forEach(recipe => {
+      const inList = searchTags.every(tag => {
+        return recipe.tags.includes(tag);
+      })
+      if (inList) {
+        filtered.push(recipe)
+      }
+    })
+    return filtered;
   }
 
-  searchRecipes(query) {
 
+
+  searchRecipes(query) {
   }
 
 

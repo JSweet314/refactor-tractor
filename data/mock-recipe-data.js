@@ -118,7 +118,7 @@ let mockRecipes = {
       "hor d'oeuvre"
       ]
       },
-      {
+    {
       "id": 678353,
       "image": "https://spoonacular.com/recipeImages/678353-556x370.jpg",
       "ingredients": [
@@ -221,7 +221,7 @@ let mockRecipes = {
       "dinner"
       ]
       },
-      {
+    {
       "id": 412309,
       "image": "https://spoonacular.com/recipeImages/412309-556x370.jpeg",
       "ingredients": [
@@ -325,7 +325,8 @@ let mockRecipes = {
       ],
       "name": "Dirty Steve's Original Wing Sauce",
       "tags": [
-      "sauce"
+      "sauce",
+      "snack"
       ]
       }
   ]
