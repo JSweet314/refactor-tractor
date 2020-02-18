@@ -62,12 +62,26 @@ class Pantry {
       //   "userId": 50,
       //   "ingredientID": 123,
       //   "ingredientModification": 3
-  }
-  const modification = {
-      userId: user.id,
-      ingredientID: ingredientID,
-      ingredientModification: amount
+    const modification = {
+        userId: user.id,
+        ingredientID: ingredientID,
+        ingredientModification: amount
+      }
+      const base = 'https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/';
+      const userEndpoint = 'users/wcUsersData'
+      fetch(base + userEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(modification)
+      })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err.message))
     }
+  }
+
 }
 
 export default Pantry;
