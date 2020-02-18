@@ -56,7 +56,7 @@ class Pantry {
     // });
   }
 
-  updateIngredients(ingredientID, amount) {
+  updateIngredients(ingredientID, amount, user) {
     // takes in an ingredient and an amount
       // {
       //   "userId": 50,
@@ -82,7 +82,7 @@ class Pantry {
     }
   }
 
-}
+
 
 export default Pantry;
 
