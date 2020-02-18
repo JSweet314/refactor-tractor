@@ -1,8 +1,10 @@
+import Pantry from "./Pantry";
+
 class User {
   constructor(user) {
     this.id = user.id;
     this.name = user.name;
-    this.pantry = user.pantry;
+    this.pantry = new Pantry(user.pantry);
     this.favoriteRecipes = [];
     this.recipesToCook = [];
   }
@@ -32,11 +34,11 @@ class User {
     list.forEach(recipe => {
       const inList = searchTags.every(tag => {
         return recipe.tags.includes(tag);
-      })
+      });
       if (inList) {
-        filtered.push(recipe)
+        filtered.push(recipe);
       }
-    })
+    });
     return filtered;
   }
 
