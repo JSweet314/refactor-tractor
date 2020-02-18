@@ -12,7 +12,6 @@ class Pantry {
         );
       });
     });
-
     return pantryHasAllAndAmount;
   }
 
@@ -38,7 +37,6 @@ class Pantry {
         cost: match.estimatedCostInCents
       };
     });
-
     return namedIngredients;
 
     // TODO move this method to the DOM?
@@ -60,7 +58,16 @@ class Pantry {
 
   updateIngredients(ingredientID, amount) {
     // takes in an ingredient and an amount
+      // {
+      //   "userId": 50,
+      //   "ingredientID": 123,
+      //   "ingredientModification": 3
   }
+  const modification = {
+      userId: user.id,
+      ingredientID: ingredientID,
+      ingredientModification: amount
+    }
 }
 
 export default Pantry;
