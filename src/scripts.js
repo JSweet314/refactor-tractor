@@ -1,13 +1,13 @@
-import $ from 'jquery';
-import users from './data/users-data';
-import recipeData from  './data/recipe-data';
-import ingredientData from './data/ingredient-data';
+import $ from "jquery";
+// import users from './data/users-data';
+// import recipeData from  './data/recipe-data';
+// import ingredientData from './data/ingredient-data';
 
-import './css/base.scss';
-import './css/styles.scss';
+import "./css/base.scss";
+import "./css/styles.scss";
 
-import User from './user';
-import Recipe from './recipe';
+import User from "./user";
+import Recipe from "./recipe";
 
 let allRecipesBtn = document.querySelector(".show-all-btn");
 let filterBtn = document.querySelector(".filter-btn");
@@ -25,7 +25,6 @@ let showPantryRecipes = document.querySelector(".show-pantry-recipes-btn");
 let tagList = document.querySelector(".tag-list");
 let user;
 
-
 window.addEventListener("load", createCards);
 window.addEventListener("load", findTags);
 window.addEventListener("load", generateUser);
@@ -38,7 +37,42 @@ searchBtn.addEventListener("click", searchRecipes);
 showPantryRecipes.addEventListener("click", findCheckedPantryBoxes);
 searchForm.addEventListener("submit", pressEnterSearch);
 
-// GENERATE A USER ON LOAD
+// globals
+const base = "https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/";
+const userEndpoint = "users/wcUsersData";
+const ingredientEndpoint = "ingredients/ingredientsData";
+const recipeEndpoint = "recipes/recipeData";
+const randomUserId = getRandomNumber();
+
+const getRandomNumber = (min = 1, max = 49) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+// initial fetch of a random user
+// returns a promise of the single user
+const getUser = () => {
+  fetch(base + userEndpoint)
+    .then(response => response.json())
+    .then(data => data.wcUsersData[randomUserId])
+    .catch(error => console.log(error.message));
+};
+
+const getRecipes = () => {
+  fetch(base + recipeEndpoint)
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => console.log(error.message));
+};
+
+// do stuff with the user in this callback
+getUser().then();
+
+// do stuff with the recipes in this callback
+getRecipes().then();
+
+// ------------------------- OLD CODE BELOW -------------------------
 function generateUser() {
   user = new User(users[Math.floor(Math.random() * users.length)]);
   let firstName = user.name.split(" ")[0];
@@ -46,8 +80,9 @@ function generateUser() {
     <div class="welcome-msg">
       <h1>Welcome ${firstName}!</h1>
     </div>`;
-  document.querySelector(".banner-image").insertAdjacentHTML("afterbegin",
-    welcomeMsg);
+  document
+    .querySelector(".banner-image")
+    .insertAdjacentHTML("afterbegin", welcomeMsg);
   findPantryInfo();
 }
 
@@ -60,7 +95,7 @@ function createCards() {
     if (recipeInfo.name.length > 40) {
       shortRecipeName = recipeInfo.name.substring(0, 40) + "...";
     }
-    addToDom(recipeInfo, shortRecipeName)
+    addToDom(recipeInfo, shortRecipeName);
   });
 }
 
@@ -76,7 +111,7 @@ function addToDom(recipeInfo, shortRecipeName) {
       </div>
       <h4>${recipeInfo.tags[0]}</h4>
       <img src="../images/apple-logo-outline.png" alt="unfilled apple icon" class="card-apple-icon">
-    </div>`
+    </div>`;
   main.insertAdjacentHTML("beforeend", cardHtml);
 }
 
@@ -103,17 +138,20 @@ function listTags(allTags) {
 }
 
 function capitalize(words) {
-  return words.split(" ").map(word => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }).join(" ");
+  return words
+    .split(" ")
+    .map(word => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
 }
 
 function findCheckedBoxes() {
   let tagCheckboxes = document.querySelectorAll(".checked-tag");
-  let checkboxInfo = Array.from(tagCheckboxes)
+  let checkboxInfo = Array.from(tagCheckboxes);
   let selectedTags = checkboxInfo.filter(box => {
     return box.checked;
-  })
+  });
   findTaggedRecipes(selectedTags);
 }
 
@@ -127,7 +165,7 @@ function findTaggedRecipes(selected) {
       if (!filteredResults.includes(recipe)) {
         filteredResults.push(recipe);
       }
-    })
+    });
   });
   showAllRecipes();
   if (filteredResults.length > 0) {
@@ -139,7 +177,7 @@ function filterRecipes(filtered) {
   let foundRecipes = recipes.filter(recipe => {
     return !filtered.includes(recipe);
   });
-  hideUnselectedRecipes(foundRecipes)
+  hideUnselectedRecipes(foundRecipes);
 }
 
 function hideUnselectedRecipes(foundRecipes) {
@@ -152,7 +190,7 @@ function hideUnselectedRecipes(foundRecipes) {
 // FAVORITE RECIPE FUNCTIONALITY
 function addToMyRecipes() {
   if (event.target.className === "card-apple-icon") {
-    let cardId = parseInt(event.target.closest(".recipe-card").id)
+    let cardId = parseInt(event.target.closest(".recipe-card").id);
     if (!user.favoriteRecipes.includes(cardId)) {
       event.target.src = "../images/apple-logo.png";
       user.saveRecipe(cardId);
@@ -197,7 +235,10 @@ function openRecipeInfo(event) {
   generateRecipeTitle(recipe, generateIngredients(recipe));
   addRecipeImage(recipe);
   generateInstructions(recipe);
-  fullRecipeInfo.insertAdjacentHTML("beforebegin", "<section id='overlay'></div>");
+  fullRecipeInfo.insertAdjacentHTML(
+    "beforebegin",
+    "<section id='overlay'></div>"
+  );
 }
 
 function generateRecipeTitle(recipe, ingredients) {
@@ -205,35 +246,49 @@ function generateRecipeTitle(recipe, ingredients) {
     <button id="exit-recipe-btn">X</button>
     <h3 id="recipe-title">${recipe.name}</h3>
     <h4>Ingredients</h4>
-    <p>${ingredients}</p>`
+    <p>${ingredients}</p>`;
   fullRecipeInfo.insertAdjacentHTML("beforeend", recipeTitle);
 }
 
 function addRecipeImage(recipe) {
-  document.getElementById("recipe-title").style.backgroundImage = `url(${recipe.image})`;
+  document.getElementById(
+    "recipe-title"
+  ).style.backgroundImage = `url(${recipe.image})`;
 }
 
 function generateIngredients(recipe) {
-  return recipe && recipe.ingredients.map(i => {
-    return `${capitalize(i.name)} (${i.quantity.amount} ${i.quantity.unit})`
-  }).join(", ");
+  return (
+    recipe &&
+    recipe.ingredients
+      .map(i => {
+        return `${capitalize(i.name)} (${i.quantity.amount} ${
+          i.quantity.unit
+        })`;
+      })
+      .join(", ")
+  );
 }
 
 function generateInstructions(recipe) {
   let instructionsList = "";
   let instructions = recipe.instructions.map(i => {
-    return i.instruction
+    return i.instruction;
   });
   instructions.forEach(i => {
-    instructionsList += `<li>${i}</li>`
+    instructionsList += `<li>${i}</li>`;
   });
   fullRecipeInfo.insertAdjacentHTML("beforeend", "<h4>Instructions</h4>");
-  fullRecipeInfo.insertAdjacentHTML("beforeend", `<ol>${instructionsList}</ol>`);
+  fullRecipeInfo.insertAdjacentHTML(
+    "beforeend",
+    `<ol>${instructionsList}</ol>`
+  );
 }
 
 function exitRecipe() {
-  while (fullRecipeInfo.firstChild &&
-    fullRecipeInfo.removeChild(fullRecipeInfo.firstChild));
+  while (
+    fullRecipeInfo.firstChild &&
+    fullRecipeInfo.removeChild(fullRecipeInfo.firstChild)
+  ) {}
   fullRecipeInfo.style.display = "none";
   document.getElementById("overlay").remove();
 }
@@ -266,14 +321,14 @@ function searchRecipes() {
 function filterNonSearched(filtered) {
   let found = recipes.filter(recipe => {
     let ids = filtered.map(f => f.id);
-    return !ids.includes(recipe.id)
-  })
+    return !ids.includes(recipe.id);
+  });
   hideUnselectedRecipes(found);
 }
 
 function createRecipeObject(recipes) {
   recipes = recipes.map(recipe => new Recipe(recipe));
-  return recipes
+  return recipes;
 }
 
 function toggleMenu() {
@@ -308,7 +363,7 @@ function findPantryInfo() {
     if (itemInfo && originalIngredient) {
       originalIngredient.count += item.amount;
     } else if (itemInfo) {
-      pantryInfo.push({name: itemInfo.name, count: item.amount});
+      pantryInfo.push({ name: itemInfo.name, count: item.amount });
     }
   });
   displayPantryInfo(pantryInfo.sort((a, b) => a.name.localeCompare(b.name)));
@@ -318,17 +373,18 @@ function displayPantryInfo(pantry) {
   pantry.forEach(ingredient => {
     let ingredientHtml = `<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
       <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`;
-    document.querySelector(".pantry-list").insertAdjacentHTML("beforeend",
-      ingredientHtml);
+    document
+      .querySelector(".pantry-list")
+      .insertAdjacentHTML("beforeend", ingredientHtml);
   });
 }
 
 function findCheckedPantryBoxes() {
   let pantryCheckboxes = document.querySelectorAll(".pantry-checkbox");
-  let pantryCheckboxInfo = Array.from(pantryCheckboxes)
+  let pantryCheckboxInfo = Array.from(pantryCheckboxes);
   let selectedIngredients = pantryCheckboxInfo.filter(box => {
     return box.checked;
-  })
+  });
   showAllRecipes();
   if (selectedIngredients.length > 0) {
     findRecipesWithCheckedIngredients(selectedIngredients);
@@ -339,7 +395,7 @@ function findRecipesWithCheckedIngredients(selected) {
   let recipeChecker = (arr, target) => target.every(v => arr.includes(v));
   let ingredientNames = selected.map(item => {
     return item.id;
-  })
+  });
   recipes.forEach(recipe => {
     let allRecipeIngredients = [];
     recipe.ingredients.forEach(ingredient => {
@@ -349,5 +405,5 @@ function findRecipesWithCheckedIngredients(selected) {
       let domRecipe = document.getElementById(`${recipe.id}`);
       domRecipe.style.display = "none";
     }
-  })
+  });
 }
