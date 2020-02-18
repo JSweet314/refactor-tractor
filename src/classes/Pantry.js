@@ -56,14 +56,9 @@ class Pantry {
     // });
   }
 
-  updateIngredients(ingredientID, amount, user) {
-    // takes in an ingredient and an amount
-      // {
-      //   "userId": 50,
-      //   "ingredientID": 123,
-      //   "ingredientModification": 3
+  updateIngredients(ingredientID, amount, id) {
     const modification = {
-        userId: user.id,
+        userID: id,
         ingredientID: ingredientID,
         ingredientModification: amount
       }
@@ -85,18 +80,3 @@ class Pantry {
 
 
 export default Pantry;
-
-// "pantry": [
-//   {
-//     "ingredient": 11477,
-//     "amount": 4
-//   }
-// ]
-
-// ingredients": [
-// {
-//   "id": 20081,
-//     "quantity": {
-//     "amount": 1.5,
-//       "unit": "c"
-//   }
