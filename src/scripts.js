@@ -1,4 +1,4 @@
-// import $ from 'jquery';
+import $ from "jquery";
 // import users from './data/users-data';
 // import recipeData from  './data/recipe-data';
 // import ingredientData from './data/ingredient-data';
@@ -37,12 +37,12 @@ searchBtn.addEventListener("click", searchRecipes);
 showPantryRecipes.addEventListener("click", findCheckedPantryBoxes);
 searchForm.addEventListener("submit", pressEnterSearch);
 
+// globals
 const base = "https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/";
 const userEndpoint = "users/wcUsersData";
-
-const state = {
-  currentUser: null
-};
+const ingredientEndpoint = "ingredients/ingredientsData";
+const recipeEndpoint = "recipes/recipeData";
+const randomUserId = getRandomNumber();
 
 const getRandomNumber = (min = 1, max = 49) => {
   min = Math.ceil(min);
@@ -50,18 +50,29 @@ const getRandomNumber = (min = 1, max = 49) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-// GENERATE A USER ON LOAD
+// initial fetch of a random user
+// returns a promise of the single user
 const getUser = () => {
-  const randomUserId = getRandomNumber();
-  fetch(`${base}${userEndpoint}`)
+  fetch(base + userEndpoint)
     .then(response => response.json())
-    .then(data => {
-      state.currentUser = wcUsersData[randomUserId];
-    });
+    .then(data => data.wcUsersData[randomUserId])
+    .catch(error => console.log(error.message));
 };
-// create a get request to the user endpoint
-// store that user in state
 
+const getRecipes = () => {
+  fetch(base + recipeEndpoint)
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => console.log(error.message));
+};
+
+// do stuff with the user in this callback
+getUser().then();
+
+// do stuff with the recipes in this callback
+getRecipes().then();
+
+// ------------------------- OLD CODE BELOW -------------------------
 function generateUser() {
   user = new User(users[Math.floor(Math.random() * users.length)]);
   let firstName = user.name.split(" ")[0];
