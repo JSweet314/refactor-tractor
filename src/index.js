@@ -3,12 +3,23 @@
 
 // An example of how you import jQuery into a JS file if you use jQuery in that file
 import $ from 'jquery';
-import domUpdates from './domUpdates';
+import dom from './domUpdates';
+import User from "./classes/User";
+import Recipe from "./classes/Recipe";
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/base.scss';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
-// import './images/turing-logo.png'
+import './images/apple-logo.png';
+import './images/search.png';
+import './images/cookbook.png';
+import './images/seasoning.png';
+import './images/apple-logo-outline.png';
+import './images/chicken-parm.jpg';
+import './images/green-apples.jpg';
+import './images/pancakes.jpg';
+import './images/search.png';
+import './images/seasoning.png';
 
 console.log('This is the JavaScript entry file - your code begins here.');
 
@@ -46,7 +57,18 @@ const currentUser = getUser()
   .then(user => new User(user))
 
 currentUser
-  .then(user => displayWelcomeMsg('fred'))
+  .then(user => {
+    const firstName = user.name.split(' ', 1);
+    dom.displayWelcomeMsg(firstName)
+  })
 
 // do stuff with the recipes in this callback
-getRecipes().then();
+const recipes = getRecipes();
+
+recipes
+  .then(data => {
+    const recipes = data.recipeData.map(recipe => {
+      return new Recipe(recipe);
+    })
+  })
+  .then()
