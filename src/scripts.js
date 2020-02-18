@@ -23,7 +23,7 @@ let searchForm = document.querySelector("#search");
 let searchInput = document.querySelector("#search-input");
 let showPantryRecipes = document.querySelector(".show-pantry-recipes-btn");
 let tagList = document.querySelector(".tag-list");
-let user;
+
 
 window.addEventListener("load", createCards);
 window.addEventListener("load", findTags);
@@ -37,54 +37,10 @@ searchBtn.addEventListener("click", searchRecipes);
 showPantryRecipes.addEventListener("click", findCheckedPantryBoxes);
 searchForm.addEventListener("submit", pressEnterSearch);
 
-// globals
-const base = "https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/";
-const userEndpoint = "users/wcUsersData";
-const ingredientEndpoint = "ingredients/ingredientsData";
-const recipeEndpoint = "recipes/recipeData";
-const randomUserId = getRandomNumber();
 
-const getRandomNumber = (min = 1, max = 49) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-};
-
-// initial fetch of a random user
-// returns a promise of the single user
-const getUser = () => {
-  fetch(base + userEndpoint)
-    .then(response => response.json())
-    .then(data => data.wcUsersData[randomUserId])
-    .catch(error => console.log(error.message));
-};
-
-const getRecipes = () => {
-  fetch(base + recipeEndpoint)
-    .then(response => response.json())
-    .then(data => data)
-    .catch(error => console.log(error.message));
-};
-
-// do stuff with the user in this callback
-getUser().then();
-
-// do stuff with the recipes in this callback
-getRecipes().then();
 
 // ------------------------- OLD CODE BELOW -------------------------
-function generateUser() {
-  user = new User(users[Math.floor(Math.random() * users.length)]);
-  let firstName = user.name.split(" ")[0];
-  let welcomeMsg = `
-    <div class="welcome-msg">
-      <h1>Welcome ${firstName}!</h1>
-    </div>`;
-  document
-    .querySelector(".banner-image")
-    .insertAdjacentHTML("afterbegin", welcomeMsg);
   findPantryInfo();
-}
 
 // CREATE RECIPE CARDS
 function createCards() {
