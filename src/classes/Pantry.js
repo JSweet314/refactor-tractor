@@ -12,7 +12,6 @@ class Pantry {
         );
       });
     });
-
     return pantryHasAllAndAmount;
   }
 
@@ -38,7 +37,6 @@ class Pantry {
         cost: match.estimatedCostInCents
       };
     });
-
     return namedIngredients;
 
     // TODO move this method to the DOM?
@@ -58,24 +56,27 @@ class Pantry {
     // });
   }
 
-  updateIngredients(ingredientID, amount) {
-    // takes in an ingredient and an amount
+  updateIngredients(ingredientID, amount, id) {
+    const modification = {
+        userID: id,
+        ingredientID: ingredientID,
+        ingredientModification: amount
+      }
+      const base = 'https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/';
+      const userEndpoint = 'users/wcUsersData'
+      fetch(base + userEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(modification)
+      })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err.message))
+    }
   }
-}
+
+
 
 export default Pantry;
-
-// "pantry": [
-//   {
-//     "ingredient": 11477,
-//     "amount": 4
-//   }
-// ]
-
-// ingredients": [
-// {
-//   "id": 20081,
-//     "quantity": {
-//     "amount": 1.5,
-//       "unit": "c"
-//   }
