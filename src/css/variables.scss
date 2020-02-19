@@ -1,0 +1,21 @@
+$active-cursor: pointer;
+$black: #000000;
+$gradient: -webkit-gradient(
+  linear,
+  left top,
+  left bottom,
+  color-stop(0, rgb(255, 255, 255)),
+  color-stop(1, rgb(225, 225, 225))
+);
+$primary-bg-color: #5b7894;
+$primary-box-shadow: 0px 0px 7px 0px #475d74;
+$primary-font-color: #359567;
+$primary-font-family: "Quicksand", sans-serif;
+$primary-text-shadow: 0px 0px 4px #c4eb67;
+$secondary-bg-color: #b6dcca;
+$secondary-box-shadow: inset 0px 0px 0px 0px white;
+$secondary-color: #c4eb67;
+$secondary-font-color: #84c8a4;
+$secondary-text-shadow: 0px 2px 4px black;
+$tertiary-bg-color: #dae4ee;
+$white: #ffffff;
