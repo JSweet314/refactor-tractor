@@ -5,7 +5,7 @@ const dom = {
     $("#user-name").text(firstName);
   },
   renderPantry(pantry) {},
-  listTags(tags) {
+  renderTags(tags) {
     tags.forEach(tag => {
       const upperCaseTag = tag.charAt(0).toUpperCase() + tag.substring(1);
 

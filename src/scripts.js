@@ -41,18 +41,6 @@ searchForm.addEventListener("submit", pressEnterSearch);
 findPantryInfo();
 
 // FILTER BY RECIPE TAGS
-function findTags() {
-  let tags = [];
-  recipeData.forEach(recipe => {
-    recipe.tags.forEach(tag => {
-      if (!tags.includes(tag)) {
-        tags.push(tag);
-      }
-    });
-  });
-  tags.sort();
-  listTags(tags);
-}
 
 function findCheckedBoxes() {
   let tagCheckboxes = document.querySelectorAll(".checked-tag");

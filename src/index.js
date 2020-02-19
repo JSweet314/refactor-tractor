@@ -69,6 +69,10 @@ recipes
     return data;
   })
   .then(data => {
-    //create tags
-    console.log("line 73", data);
+    const tags = data.reduce((tags, recipe) => {
+      tags.push(...recipe.tags);
+      return tags;
+    }, []);
+
+    dom.renderTags([...new Set(tags)]);
   });
