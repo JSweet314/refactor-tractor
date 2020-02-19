@@ -24,7 +24,6 @@ let searchInput = document.querySelector("#search-input");
 let showPantryRecipes = document.querySelector(".show-pantry-recipes-btn");
 let tagList = document.querySelector(".tag-list");
 
-
 window.addEventListener("load", createCards);
 window.addEventListener("load", findTags);
 window.addEventListener("load", generateUser);
@@ -37,65 +36,13 @@ searchBtn.addEventListener("click", searchRecipes);
 showPantryRecipes.addEventListener("click", findCheckedPantryBoxes);
 searchForm.addEventListener("submit", pressEnterSearch);
 
+findPantryInfo();
 
-
-// ------------------------- OLD CODE BELOW -------------------------
-// ADD PANTRY TO DOM
-  findPantryInfo();
-
-
-// FILTER BY RECIPE TAGS
-function findTags() {
-  let tags = [];
-  recipeData.forEach(recipe => {
-    recipe.tags.forEach(tag => {
-      if (!tags.includes(tag)) {
-        tags.push(tag);
-      }
-    });
-  });
-  tags.sort();
-  listTags(tags);
-}
-
-function listTags(allTags) {
-  allTags.forEach(tag => {
-    let tagHtml = `<li><input type="checkbox" class="checked-tag" id="${tag}">
-      <label for="${tag}">${capitalize(tag)}</label></li>`;
-    tagList.insertAdjacentHTML("beforeend", tagHtml);
-  });
-}
-
-function capitalize(words) {
-  return words
-    .split(" ")
-    .map(word => {
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join(" ");
-}
-
-function findCheckedBoxes() {
-  let tagCheckboxes = document.querySelectorAll(".checked-tag");
-  let checkboxInfo = Array.from(tagCheckboxes);
-  let selectedTags = checkboxInfo.filter(box => {
-    return box.checked;
-  });
-  findTaggedRecipes(selectedTags);
-}
+// this function was originally invoked inside of the method that we have named filterTags()
+findTaggedRecipes(selectedTags);
 
 function findTaggedRecipes(selected) {
-  let filteredResults = [];
-  selected.forEach(tag => {
-    let allRecipes = recipes.filter(recipe => {
-      return recipe.tags.includes(tag.id);
-    });
-    allRecipes.forEach(recipe => {
-      if (!filteredResults.includes(recipe)) {
-        filteredResults.push(recipe);
-      }
-    });
-  });
+  // this part of the function needs to be accounted for still, it is not yet implemented
   showAllRecipes();
   if (filteredResults.length > 0) {
     filterRecipes(filteredResults);
