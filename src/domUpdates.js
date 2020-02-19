@@ -19,6 +19,15 @@ const dom = {
       $(".tag-list").append(tagHtml);
     });
   },
+  filterTags() {
+    $(".checked-tag")
+      .toArray()
+      .filter(checkbox => {
+        return $(checkbox).attr("checked");
+      });
+
+    findTaggedRecipes(selectedTags);
+  },
   createCards(recipeData) {
     recipeData.forEach(recipe => {
       const recipeCard = `

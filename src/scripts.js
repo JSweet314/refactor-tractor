@@ -42,15 +42,6 @@ findPantryInfo();
 
 // FILTER BY RECIPE TAGS
 
-function findCheckedBoxes() {
-  let tagCheckboxes = document.querySelectorAll(".checked-tag");
-  let checkboxInfo = Array.from(tagCheckboxes);
-  let selectedTags = checkboxInfo.filter(box => {
-    return box.checked;
-  });
-  findTaggedRecipes(selectedTags);
-}
-
 function findTaggedRecipes(selected) {
   let filteredResults = [];
   selected.forEach(tag => {

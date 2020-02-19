@@ -74,5 +74,5 @@ recipes
       return tags;
     }, []);
 
-    dom.renderTags([...new Set(tags)]);
+    dom.renderTags(new Set(tags));
   });
