@@ -7,7 +7,9 @@ import dom from './domUpdates';
 import User from "./classes/User";
 import Recipe from "./classes/Recipe";
 // An example of how you tell webpack to use a CSS (SCSS) file
-import './css/base.scss';
+import './css/index.scss';
+import './css/variables.scss';
+
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/apple-logo.png';
@@ -67,7 +69,6 @@ const recipes = getRecipes();
 
 recipes
   .then(data => {
-    console.log(data)
     return data.recipeData.map(recipe => {
       return new Recipe(recipe);
     })
