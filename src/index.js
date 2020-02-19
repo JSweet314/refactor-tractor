@@ -75,4 +75,10 @@ recipes
     }, []);
 
     dom.renderTags(new Set(tags));
+    return data;
+  })
+  .then(data => {
+    //
+    const selectedTags = dom.filterTags();
+    const selectedRecipes = dom.filterRecipes(selectedTags);
   });

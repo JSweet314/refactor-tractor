@@ -1,6 +1,9 @@
 import $ from "jquery";
 
 const dom = {
+  // bindEvents() {
+  //   $(".filter-btn").on('click', )
+  // }
   displayWelcomeMsg(firstName) {
     $("#user-name").text(firstName);
   },
@@ -20,13 +23,21 @@ const dom = {
     });
   },
   filterTags() {
-    $(".checked-tag")
+    return $(".checked-tag")
       .toArray()
       .filter(checkbox => {
         return $(checkbox).attr("checked");
       });
+  },
+  filterRecipes(selectedTags, recipeData) {
+    const filteredRecipes = selectedTags.reduce((list, tag) => {
+      const filtered = recipeData.filter(recipe => {
+        return recipe.tags.includes(tag);
+      });
+      return [...list, ...filtered];
+    }, []);
 
-    findTaggedRecipes(selectedTags);
+    return new Set(filteredRecipes);
   },
   createCards(recipeData) {
     recipeData.forEach(recipe => {
@@ -35,8 +46,8 @@ const dom = {
           <h3 maxlength="40">${recipe.name}</h3>
           <section class="card-photo-container">
             <img src=${recipe.image} class="card-photo-preview" alt="${
-        recipe.name
-      } recipe" title="${recipe.name} recipe">
+  recipe.name
+} recipe" title="${recipe.name} recipe">
             <p class="text">Click for Instructions</p>
           </section>
           <h4>${recipe.tags.join(", ")}</h4>

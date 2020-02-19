@@ -36,24 +36,13 @@ searchBtn.addEventListener("click", searchRecipes);
 showPantryRecipes.addEventListener("click", findCheckedPantryBoxes);
 searchForm.addEventListener("submit", pressEnterSearch);
 
-// ------------------------- OLD CODE BELOW -------------------------
-// ADD PANTRY TO DOM
 findPantryInfo();
 
-// FILTER BY RECIPE TAGS
+// this function was originally invoked inside of the method that we have named filterTags()
+findTaggedRecipes(selectedTags);
 
 function findTaggedRecipes(selected) {
-  let filteredResults = [];
-  selected.forEach(tag => {
-    let allRecipes = recipes.filter(recipe => {
-      return recipe.tags.includes(tag.id);
-    });
-    allRecipes.forEach(recipe => {
-      if (!filteredResults.includes(recipe)) {
-        filteredResults.push(recipe);
-      }
-    });
-  });
+  // this part of the function needs to be accounted for still, it is not yet implemented
   showAllRecipes();
   if (filteredResults.length > 0) {
     filterRecipes(filteredResults);
