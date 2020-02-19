@@ -67,8 +67,11 @@ const recipes = getRecipes();
 
 recipes
   .then(data => {
-    const recipes = data.recipeData.map(recipe => {
+    console.log(data)
+    return data.recipeData.map(recipe => {
       return new Recipe(recipe);
     })
   })
-  .then()
+  .then(data => {
+    dom.createCards(data)
+  })
