@@ -1,0 +1,28 @@
+$active-cursor: pointer;
+
+$primary-font-color: #359567;
+$secondary-font-color: #84c8a4;
+$secondary-color: #c4eb67;
+
+$primary-bg-color: #5b7894;
+$secondary-bg-color: #b6dcca;
+
+$white: #ffffff;
+
+$primary-box-shadow: 0px 0px 7px 0px #475d74;
+$secondary-box-shadow: inset 0px 0px 0px 0px white;
+
+$gradient: -webkit-gradient(
+  linear,
+  left top,
+  left bottom,
+  color-stop(0, rgb(255, 255, 255)),
+  color-stop(1, rgb(225, 225, 225))
+);
+
+$primary-text-shadow: 0px 0px 4px #c4eb67;
+$secondary-text-shadow: 0px 2px 4px black;
+$primary-font-family: "Quicksand", sans-serif;
+
+$tertiary-bg-color: #dae4ee;
+$black: #000000;
