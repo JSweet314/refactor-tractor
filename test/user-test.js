@@ -1,10 +1,13 @@
-import { expect } from "chai";
+import chai, { expect } from 'chai';
+import spies from 'chai-spies';
 import User from "../src/classes/User";
 import Recipe from "../src/classes/Recipe";
 import Pantry from "../src/classes/Pantry";
 import mockUsers from "../data/mock-user-data";
 import mockRecipes from "../data/mock-recipe-data";
 import mockIngredients from "../data/mock-ingredient-data";
+
+chai.use(spies);
 
 describe("User", function() {
   let user;
@@ -23,6 +26,8 @@ describe("User", function() {
     const mockRecipe3 = mockRecipes.recipeData[2];
     recipe3 = new Recipe(mockRecipe3);
     ingredients = mockIngredients.ingredientsData;
+    global.localStorage = {};
+    chai.spy.on(localStorage, ['setItem', 'getItem'], () => {})
   });
 
   it("should be a function", function() {
@@ -54,60 +59,70 @@ describe("User", function() {
     expect(user.recipesToCook).to.deep.equal([]);
   });
 
-  it("should be able to save a recipe to favoriteRecipes", function() {
-    user.addRecipe(recipe, "favoriteRecipes");
-    expect(user.favoriteRecipes[0].id).to.equal(595736);
-  });
+  describe("add and remove recipes", function() {
+    it("should be able to save a recipe to favoriteRecipes", function() {
+      user.addRecipe(recipe, "favoriteRecipes");
+      expect(localStorage.setItem).to.be.called(1);
+      expect(localStorage.setItem).to.be.called.with('favoriteRecipes', JSON.stringify(user.favoriteRecipes));
+      expect(user.favoriteRecipes[0].id).to.equal(595736);
+    });
 
-  it("shouldn't be able to save recipe to favorites if it has already been saved", function() {
-    user.addRecipe(recipe, "favoriteRecipes");
-    expect(user.favoriteRecipes[0].id).to.equal(595736);
-    expect(user.addRecipe.bind(user, recipe, "favoriteRecipes")).to.throw(
-      "Recipe already in favoriteRecipes"
-    );
-    expect(user.favoriteRecipes.length).to.equal(1);
-  });
+    it("shouldn't be able to save recipe to favorites if it has already been saved", function() {
+      user.addRecipe(recipe, "favoriteRecipes");
+      expect(user.favoriteRecipes[0].id).to.equal(595736);
+      expect(user.addRecipe.bind(user, recipe, "favoriteRecipes")).to.throw(
+        "Recipe already in favoriteRecipes"
+      );
+      expect(user.favoriteRecipes.length).to.equal(1);
+    });
 
-  it("should be able to add recipes to cook", function() {
-    user.addRecipe(recipe, "recipesToCook");
-    expect(user.recipesToCook[0].id).to.equal(595736);
-  });
+    it("should be able to add recipes to cook", function() {
+      user.addRecipe(recipe, "recipesToCook");
+      expect(localStorage.setItem).to.be.called(1);
+      expect(localStorage.setItem).to.be.called.with('recipesToCook', JSON.stringify(user.recipesToCook));
+      expect(user.recipesToCook[0].id).to.equal(595736);
+    });
 
-  it("shouldn't be able to save recipe to cook it has already been saved", function() {
-    user.addRecipe(recipe, "recipesToCook");
-    expect(user.recipesToCook[0].id).to.equal(595736);
-    expect(user.addRecipe.bind(user, recipe, "recipesToCook")).to.throw(
-      "Recipe already in recipesToCook"
-    );
-    expect(user.recipesToCook.length).to.equal(1);
-  });
+    it("shouldn't be able to save recipe to cook it has already been saved", function() {
+      user.addRecipe(recipe, "recipesToCook");
+      expect(user.recipesToCook[0].id).to.equal(595736);
+      expect(user.addRecipe.bind(user, recipe, "recipesToCook")).to.throw(
+        "Recipe already in recipesToCook"
+      );
+      expect(user.recipesToCook.length).to.equal(1);
+    });
 
-  it("should be able to remove a recipe from favoriteRecipes", function() {
-    user.addRecipe(recipe, "favoriteRecipes");
-    expect(user.favoriteRecipes[0].id).to.equal(595736);
-    user.removeRecipe(recipe, "favoriteRecipes");
-    expect(user.favoriteRecipes.length).to.equal(0);
-  });
+    it("should be able to remove a recipe from favoriteRecipes", function() {
+      user.addRecipe(recipe, "favoriteRecipes");
+      expect(user.favoriteRecipes[0].id).to.equal(595736);
+      user.removeRecipe(recipe, "favoriteRecipes");
+      expect(localStorage.setItem).to.be.called(2);
+      expect(localStorage.setItem).to.be.called.with('favoriteRecipes', JSON.stringify(user.favoriteRecipes))
+      expect(user.favoriteRecipes.length).to.equal(0);
+    });
 
-  it("shouldn't be able to remove recipe from favorites if doesn't exist", function() {
-    expect(user.removeRecipe.bind(user, recipe, "favoriteRecipes")).to.throw(
-      `Recipe doesn't exist in favoriteRecipes`
-    );
-    expect(user.favoriteRecipes.length).to.equal(0);
-  });
+    it("shouldn't be able to remove recipe from favorites if doesn't exist", function() {
+      expect(user.removeRecipe.bind(user, recipe, "favoriteRecipes")).to.throw(
+        `Recipe doesn't exist in favoriteRecipes`
+      );
+      expect(user.favoriteRecipes.length).to.equal(0);
+    });
 
-  it("should be able to remove recipes to cook", function() {
-    user.addRecipe(recipe, "recipesToCook");
-    expect(user.recipesToCook[0].id).to.equal(595736);
-    user.removeRecipe(recipe, "recipesToCook");
-    expect(user.recipesToCook.length).to.equal(0);
-  });
+    it("should be able to remove recipes to cook", function() {
+      user.addRecipe(recipe, "recipesToCook");
+      expect(user.recipesToCook[0].id).to.equal(595736);
+      user.removeRecipe(recipe, "recipesToCook");
+      expect(localStorage.setItem).to.be.called(2);
+      expect(localStorage.setItem).to.be.called.with('recipesToCook', JSON.stringify(user.recipesToCook))
+      expect(user.recipesToCook.length).to.equal(0);
+    });
 
-  it("shouldn't be able to remove recipe to cook if it doesn't exist", function() {
-    expect(user.removeRecipe.bind(user, recipe, "recipesToCook")).to.throw(
-      `Recipe doesn't exist in recipesToCook`
-    );
-    expect(user.recipesToCook.length).to.equal(0);
+    it("shouldn't be able to remove recipe to cook if it doesn't exist", function() {
+      expect(user.removeRecipe.bind(user, recipe, "recipesToCook")).to.throw(
+        `Recipe doesn't exist in recipesToCook`
+      );
+      expect(user.recipesToCook.length).to.equal(0);
+    });
   });
 
   it("should be able to filter favorite recipes by tag", function() {
