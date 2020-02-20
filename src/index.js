@@ -75,6 +75,6 @@ recipes
     }, []);
 
     dom.renderTags(new Set(tags));
-    dom.bindEvents();
+    dom.bindEvents(data);
     return data;
   })
