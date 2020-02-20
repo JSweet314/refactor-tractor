@@ -1,3 +1,7 @@
+@mixin transition($time) {
+  transition: $time ease;
+}
+
 .recipe-card {
   background-color: $white;
   border: 2px solid $secondary-color;
@@ -7,59 +11,49 @@
   margin: 20px;
   padding: 15px;
   width: 250px;
+  .card-photo-preview {
+    @include transition(.8s);
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 7px;
+    cursor: $active-cursor;
+    height: 130px;
+    width: 100%;
+  }
+  .text {
+    @include transition(.5s)
+    background: $primary-font-color;
+    color: $white;
+    font-weight: 700;
+    font-size: 0px;
+    opacity: 0%;
+    padding: 0%;
+    position: absolute;
+    text-align: center;
+  }
+  .card-apple-icon {
+    cursor: $active-cursor;
+    float: right;
+    height: 50px;
+    padding-bottom: 10px;
+    width: 45px;
+  }
   &:hover {
     .card-photo-preview {
       opacity: 50%;
-      transition: .8s ease;
     }
     .text {
       font-size: 20px;
       opacity: 100%;
-      transition: .5s ease;
-      width: 100%;
+      width: inherit;
+      padding: 0 20px;
     }
     h3 {
+      @include transition(.8s)
       text-shadow: 0px 0px 4px #C4EB67;
-      transition: .8s ease;
     }
   }
-}
-
-.card-apple-icon {
-  cursor: $active-cursor;
-  float: right;
-  height: 50px;
-  padding-bottom: 10px;
-  width: 45px;
-}
-
-.card-photo-preview {
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: 7px;
-  cursor: $active-cursor;
-  height: 130px;
-  transition: .8s ease;
-  width: 100%;
-}
-
-.card-photo-container {
-  height: 130px;
-  position: relative;
-}
-
-.text {
-  background: $primary-font-color;
-  color: $white;
-  font-weight: 700;
-  font-size: 0px;
-  opacity: 0%;
-  padding: 0%;
-  position: absolute;
-  text-align: center;
-  width: 0%;
-  transition: .5s ease;
 }
 
 .recipe-instructions {
@@ -77,7 +71,20 @@
   top: 15%;
   width: 70%;
   z-index: 1000;
+  h4 {
+    background: $white;
+    color: $primary-font-color;
+  }
+  p {
+    margin-left: 2%;
+  }
+  ol {
+    margin-right: 2%;
+  }
 }
+
+// It's hard to tell now since we don't have the expanding functionality,
+// we may need adjust these
 
 #recipe-title {
   background-repeat: no-repeat;
@@ -89,19 +96,6 @@
   padding: 5%;
   text-align: center;
   text-shadow: 0px 0px 6px $black;
-}
-
-.recipe-instructions h4 {
-  background: $white;
-  color: $primary-font-color;
-}
-
-.recipe-instructions p {
-  margin-left: 2%;
-}
-
-.recipe-instructions ol {
-  margin-right: 2%;
 }
 
 #overlay {
