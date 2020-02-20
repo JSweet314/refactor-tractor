@@ -4,5 +4,5 @@
 }
 
 @mixin transition($time) {
-  transition: $time ease;
+  transition: $time ease-in-out;
 }
