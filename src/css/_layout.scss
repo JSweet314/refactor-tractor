@@ -1,23 +1,59 @@
+// We will need to break out a mixin file
+
+@mixin flex-primary() {
+  display: flex;
+  justify-content: center;
+}
+
 body {
-  background-color: #5B7894;
+  -webkit-font-smoothing: auto;
+  background-color: $primary-bg-color;
   display: grid;
-  font-family: "Quicksand", sans-serif;
-  grid-template-columns: 1fr 5fr;
+  font-family: $primary-font-family;
   grid-template-areas:
     "header header"
     "image image"
     "aside main";
+  grid-template-columns: 1fr 5fr;
   height: 100vh;
   margin: 0;
   padding: 0;
-  -webkit-font-smoothing: auto;
+}
+
+header,
+main,
+#search {
+  // Header didn't originally have j-c center, so we may need
+  // to get rid of that
+  @include flex-primary();
+  flex-direction: row;
+}
+
+header {
+  align-items: center;
+  grid-area: header;
+  height: 86px;
 }
 
 main {
-  grid-area: main;
-  display: flex;
-  justify-content: center;
   align-content: flex-start;
-  flex-direction: row;
   flex-wrap: wrap;
+  grid-area: main;
+}
+
+aside {
+  @include flex-primary();
+}
+
+.card-photo-container {
+  @include flex-primary();
+  align-items: center;
+}
+
+.button--nav {
+  flex-direction: column;
+}
+
+.is-hidden {
+  display: none;
 }

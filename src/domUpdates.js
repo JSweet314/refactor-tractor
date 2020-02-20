@@ -3,7 +3,7 @@ import $ from "jquery";
 const dom = {
   bindEvents(recipeData) {
     $(".filter-btn").on('click', function() {
-      this.handleFilterClick(recipeData)
+      dom.handleFilterClick(recipeData)
     })
   },
 
@@ -71,10 +71,9 @@ const dom = {
   },
 
   handleFilterClick(recipeData) {
-    const selectedTags = dom.filterTags();
-    console.log(selectedTags)
-    const selectedRecipes = dom.filterRecipes(selectedTags, recipeData);
-    console.log(selectedRecipes)
+    const selectedTags = $(dom.filterTags()).toArray();
+    const tagIds = selectedTags.map(tag => tag.id);
+    const selectedRecipes = dom.filterRecipes(tagIds, recipeData);
     dom.clearCards();
     dom.createCards(selectedRecipes);
   }
