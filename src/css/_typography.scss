@@ -1,8 +1,8 @@
 h1 {
-  align-self: $center-align;
+  align-self: $align-center;
   color: $white;
   font-family: $secondary-font-family;
-  font-size: 50px;
+  font-size: 3rem;
   margin: 0%;
   padding: 0.5% 0.7% 0%;
   width: 70%;
@@ -14,23 +14,23 @@ h2 {
 }
 
 h3 {
+  @include transition(0.4s);
   color: $primary-font-color;
   cursor: pointer;
   height: 17%;
   margin: 5px 5px 10px 0px;
-  transition: .8s ease;
 }
 
 h4 {
-  color: #359567;
-  background-color: #C4EB67;
-  border-radius: 3px;
+  color: $primary-font-color;
+  background-color: $secondary-color;
+  border-radius: $border-radius;
   margin: 10px 0px 0px 0px;
   padding: 1px 4px 1px 4px;
   width: max-content;
 }
 
 span {
-  color: #C4EB67;
+  color: $secondary-color;
   font-weight: 400;
 }
