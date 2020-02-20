@@ -1,19 +1,15 @@
-header {
-  grid-area: header;
-  padding: 0% 0%;
-  width: 100%;
-}
+.icon {
+  width: 34px;
 
-.header-apple-icon {
-  height: 40px;
-  margin-left: 5px;
-  width: 35px;
+  &.icon--header {
+    margin-left: 5px;
+  }
 }
 
 #search {
   border-radius: 15px 15px 15px 15px;
-  border: 3px outset #C4EB67;
-  box-shadow: 0px 0px 7px 0px #475d74;
+  border: 3px outset #c4eb67;
+  box-shadow: $primary-box-shadow;
   font-family: "Quicksand", sans-serif;
   margin: 1.2% 0.5% 1.2% 0%;
   width: 100%;
@@ -21,24 +17,30 @@ header {
 
 #search-input {
   background-color: #b6dcca;
-  background: -webkit-gradient( linear,left top, left bottom, color-stop(0, rgb(255, 255, 255)), color-stop(1, rgb(225,225,225)));
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0, rgb(255, 255, 255)),
+    color-stop(1, rgb(225, 225, 225))
+  );
   border-radius: 10px 0px 0px 10px;
   border: none;
   box-shadow: inset -3px -1px 20px 1px #5c7894;
-  color: #5B7894;
+  color: #5b7894;
   font-family: "Quicksand", sans-serif;
   font-size: 42px;
   height: 100%;
   outline: none;
   padding: 0% 2% 0% 0%;
   text-align: right;
-  transition: .8s ease;
+  transition: 0.8s ease;
   width: 100%;
 }
 
 #search-input:hover {
   box-shadow: inset 0px 0px 0px 0px white;
-  transition: .8s ease;
+  transition: 0.8s ease;
 }
 
 #search-input:focus {
@@ -46,7 +48,7 @@ header {
 }
 
 #search-input::placeholder {
-  color: #5B7894;
+  color: #5b7894;
   font-size: 20px;
   text-align: right;
   text-shadow: none;
@@ -54,38 +56,5 @@ header {
 
 #search-input:focus::placeholder {
   font-size: 0px;
-  transition: .8s ease;
-}
-
-.search-label {
-  display: none;
-}
-
-.banner-image {
-  background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url("../images/green-apples.jpg");
-  grid-area: image;
-  height: 150px;
-  overflow: hidden;
-  width: 100%;
-}
-
-.my-recipes-banner,
-.welcome-msg {
-  text-align: center;
-  width: 95%;
-}
-
-.my-recipes-banner h1,
-.welcome-msg h1 {
-  color: white;
-  width: 100%;
-}
-
-.my-recipes-banner {
-  display: none;
-  margin-top: 25px;
-}
-
-.welcome-msg {
-  margin-top: 50px;
+  transition: 0.8s ease;
 }

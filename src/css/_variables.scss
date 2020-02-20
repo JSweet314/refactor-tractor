@@ -1,16 +1,11 @@
-// Fonts
-$primary-font-family: "Quicksand", sans-serif;
-
 // Colors
 $black: #000000;
 $primary-bg-color: #5b7894;
-$primary-box-shadow: 0px 0px 7px 0px #475d74;
 $primary-font-color: #359567;
 $secondary-bg-color: #b6dcca;
-$secondary-box-shadow: inset 0px 0px 0px 0px white;
 $secondary-color: #c4eb67;
 $secondary-font-color: #84c8a4;
-$secondary-text-shadow: 0px 2px 4px black;
+$secondary-text-shadow: 0px 2px 4px $black;
 $tertiary-bg-color: #dae4ee;
 $white: #ffffff;
 
@@ -20,11 +15,17 @@ $gradient: -webkit-gradient(
   linear,
   left top,
   left bottom,
-  color-stop(0, rgb(255, 255, 255)),
-  color-stop(1, rgb(225, 225, 225))
+  color-stop(0, $white),
+  color-stop(1, $tertiary-bg-color)
 );
+$linear-gradient: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+$primary-box-shadow: 0px 0px 7px 0px $primary-bg-color;
 $primary-text-shadow: 0px 2px 4px $black;
+$secondary-box-shadow: inset 0px 0px 0px 0px $white;
 $secondary-text-shadow: 0px 2px 4px $secondary-color;
+
+// Fonts
+$primary-font-family: "Quicksand", sans-serif;
 
 // States
 $active-cursor: pointer;
