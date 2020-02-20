@@ -1,5 +1,10 @@
 @import "_variables";
 
+@mixin flex-primary() {
+  display: flex;
+  justify-content: center;
+}
+
 body {
   background-color: $primary-bg-color;
   display: grid;
@@ -15,40 +20,32 @@ body {
   -webkit-font-smoothing: auto;
 }
 
+header,
+main,
+#search {
+  // Header didn't originally have j-c center, so we may need
+  // to get rid of that
+  @include flex-primary();
+  flex-direction: row;
+}
+
+
 main {
   grid-area: main;
-  display: flex;
-  justify-content: center;
   align-content: flex-start;
-  flex-direction: row;
   flex-wrap: wrap;
 }
 
 aside {
-  display: flex;
-  justify-content: center;
+  @include flex-primary();
+}
+
+.nav-btn,
+.card-photo-container {
+  @include flex-primary();
+  align-items: center;
 }
 
 .nav-btn {
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-header {
-  display: flex;
-  flex-direction: row;
-}
-
-#search {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.card-photo-container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
 }
