@@ -1,8 +1,5 @@
-// We will need to break out a mixin file
-
-@mixin flex-primary() {
-  display: flex;
-  justify-content: center;
+aside {
+  @include flex-primary();
 }
 
 body {
@@ -20,11 +17,18 @@ body {
   padding: 0;
 }
 
+.button--nav {
+  flex-direction: column;
+}
+
+.card-photo-container {
+  @include flex-primary();
+  align-items: center;
+}
+
 header,
 main,
 #search {
-  // Header didn't originally have j-c center, so we may need
-  // to get rid of that
   @include flex-primary();
   flex-direction: row;
 }
@@ -35,25 +39,12 @@ header {
   height: 86px;
 }
 
+.is-hidden {
+  display: none;
+}
+
 main {
   align-content: flex-start;
   flex-wrap: wrap;
   grid-area: main;
-}
-
-aside {
-  @include flex-primary();
-}
-
-.card-photo-container {
-  @include flex-primary();
-  align-items: center;
-}
-
-.button--nav {
-  flex-direction: column;
-}
-
-.is-hidden {
-  display: none;
 }
