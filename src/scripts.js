@@ -114,7 +114,7 @@ function openRecipeInfo(event) {
 
 function generateRecipeTitle(recipe, ingredients) {
   let recipeTitle = `
-    <button id="exit-recipe-btn">X</button>
+    <button class="button button--close-recipe" id="exit-recipe-btn">X</button>
     <h3 id="recipe-title">${recipe.name}</h3>
     <h4>Ingredients</h4>
     <p>${ingredients}</p>`;
