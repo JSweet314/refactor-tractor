@@ -1,0 +1,8 @@
+@mixin flex-primary() {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin transition($time) {
+  transition: $time ease-in-out;
+}
