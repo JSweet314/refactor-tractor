@@ -37,12 +37,11 @@
 }
 
 .button--nav {
+  @include flex-primary();
   align-items: center;
   background: $primary-bg-color;
-  display: flex;
   flex-direction: column;
   font-size: 0rem;
-  justify-content: center;
   width: 15%;
 
   & img {

@@ -29,6 +29,11 @@ main,
   flex-direction: row;
 }
 
+header {
+  align-items: center;
+  grid-area: header;
+  height: 86px;
+}
 
 main {
   align-content: flex-start;
@@ -40,12 +45,11 @@ aside {
   @include flex-primary();
 }
 
-.nav-btn,
 .card-photo-container {
   @include flex-primary();
   align-items: center;
 }
 
-.nav-btn {
+.button--nav {
   flex-direction: column;
 }
