@@ -1,9 +1,9 @@
 aside {
   background-color: $white;
   display: flex;
-  justify-content: center;
+  justify-content: $center-align;
   height: auto;
-  text-align: center;
+  text-align: $center-align;
 }
 
 .wrap {
@@ -16,7 +16,7 @@ aside {
 
 ul {
   list-style-type: none;
-  text-align: left;
+  text-align: $left-align;
   padding-left: 35px;
 }
 
