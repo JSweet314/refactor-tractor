@@ -1,4 +1,4 @@
-@import "_variables";
+// We will need to break out a mixin file
 
 @mixin flex-primary() {
   display: flex;
@@ -6,18 +6,18 @@
 }
 
 body {
+  -webkit-font-smoothing: auto;
   background-color: $primary-bg-color;
   display: grid;
   font-family: $primary-font-family;
-  grid-template-columns: 1fr 5fr;
   grid-template-areas:
     "header header"
     "image image"
     "aside main";
+  grid-template-columns: 1fr 5fr;
   height: 100vh;
   margin: 0;
   padding: 0;
-  -webkit-font-smoothing: auto;
 }
 
 header,
@@ -31,9 +31,9 @@ main,
 
 
 main {
-  grid-area: main;
   align-content: flex-start;
   flex-wrap: wrap;
+  grid-area: main;
 }
 
 aside {
