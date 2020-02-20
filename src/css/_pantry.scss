@@ -1,5 +1,5 @@
 .drop-menu {
-  align-items: center;
+  align-items: $center-align;
   background-color: #DAE4EE;
   display: none;
   height: 600px;
@@ -8,7 +8,7 @@
   overflow: scroll;
   padding: 12px;
   position: absolute;
-  text-align: center;
+  text-align: $center-align;
   width: 250px;
   z-index: 3;
 }
