@@ -75,10 +75,6 @@ recipes
     }, []);
 
     dom.renderTags(new Set(tags));
+    dom.bindEvents();
     return data;
   })
-  .then(data => {
-    //
-    const selectedTags = dom.filterTags();
-    const selectedRecipes = dom.filterRecipes(selectedTags);
-  });

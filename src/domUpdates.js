@@ -1,13 +1,18 @@
 import $ from "jquery";
 
 const dom = {
-  // bindEvents() {
-  //   $(".filter-btn").on('click', )
-  // }
+  bindEvents(recipeData) {
+    $(".filter-btn").on('click', function() {
+      this.handleFilterClick(recipeData)
+    })
+  },
+
   displayWelcomeMsg(firstName) {
     $("#user-name").text(firstName);
   },
+
   renderPantry(pantry) {},
+
   renderTags(tags) {
     tags.forEach(tag => {
       const upperCaseTag = tag.charAt(0).toUpperCase() + tag.substring(1);
@@ -22,13 +27,15 @@ const dom = {
       $(".tag-list").append(tagHtml);
     });
   },
+
   filterTags() {
     return $(".checked-tag")
       .toArray()
       .filter(checkbox => {
-        return $(checkbox).attr("checked");
+        return $(checkbox).is(":checked");
       });
   },
+
   filterRecipes(selectedTags, recipeData) {
     const filteredRecipes = selectedTags.reduce((list, tag) => {
       const filtered = recipeData.filter(recipe => {
@@ -39,6 +46,7 @@ const dom = {
 
     return new Set(filteredRecipes);
   },
+
   createCards(recipeData) {
     recipeData.forEach(recipe => {
       const recipeCard = `
@@ -54,8 +62,21 @@ const dom = {
           <img src="../images/apple-logo-outline.png" alt="unfilled apple icon" class="card-apple-icon">
         </article>
       `;
-      $("main").append(recipeCard);
+      $('main').append(recipeCard);
     });
+  },
+
+  clearCards() {
+    $('main').html('');
+  },
+
+  handleFilterClick(recipeData) {
+    const selectedTags = dom.filterTags();
+    console.log(selectedTags)
+    const selectedRecipes = dom.filterRecipes(selectedTags, recipeData);
+    console.log(selectedRecipes)
+    dom.clearCards();
+    dom.createCards(selectedRecipes);
   }
 };
 
