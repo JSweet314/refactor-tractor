@@ -1,5 +1,5 @@
 .drop-menu {
-  align-items: $center-align;
+  align-items: $align-center;
   background-color: $tertiary-bg-color;
   height: 600px;
   margin-left: 81%;
@@ -7,9 +7,10 @@
   overflow: scroll;
   padding: 12px;
   position: absolute;
-  text-align: $center-align;
+  text-align: $align-center;
   width: 250px;
   z-index: 3;
+
   & h2 {
     color: $primary-font-color;
     margin: 0px;
@@ -19,5 +20,5 @@
 .pantry-list {
   color: $black;
   padding-left: 1rem;
-  text-align: $left-align;
+  text-align: $align-left;
 }
