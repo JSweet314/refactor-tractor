@@ -36,27 +36,6 @@ findPantryInfo();
 // this function was originally invoked inside of the method that we have named filterTags()
 findTaggedRecipes(selectedTags);
 
-function findTaggedRecipes(selected) {
-  // this part of the function needs to be accounted for still, it is not yet implemented
-  showAllRecipes();
-  if (filteredResults.length > 0) {
-    filterRecipes(filteredResults);
-  }
-}
-
-function filterRecipes(filtered) {
-  let foundRecipes = recipes.filter(recipe => {
-    return !filtered.includes(recipe);
-  });
-  hideUnselectedRecipes(foundRecipes);
-}
-
-function hideUnselectedRecipes(foundRecipes) {
-  foundRecipes.forEach(recipe => {
-    let domRecipe = document.getElementById(`${recipe.id}`);
-    domRecipe.style.display = "none";
-  });
-}
 
 // FAVORITE RECIPE FUNCTIONALITY
 function addToMyRecipes() {
@@ -187,19 +166,6 @@ function searchRecipes() {
     return recipe.name.toLowerCase().includes(searchInput.value.toLowerCase());
   });
   filterNonSearched(createRecipeObject(searchedRecipes));
-}
-
-function filterNonSearched(filtered) {
-  let found = recipes.filter(recipe => {
-    let ids = filtered.map(f => f.id);
-    return !ids.includes(recipe.id);
-  });
-  hideUnselectedRecipes(found);
-}
-
-function createRecipeObject(recipes) {
-  recipes = recipes.map(recipe => new Recipe(recipe));
-  return recipes;
 }
 
 function toggleMenu() {
