@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-
+import chai, { expect } from 'chai';
 import Recipe from '../src/classes/Recipe';
 import mockRecipes from '../data/mock-recipe-data';
 import mockIngredients from "../data/mock-ingredient-data";

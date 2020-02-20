@@ -1,5 +1,8 @@
-class Recipe {
+import RecipeFinder from './RecipeFinder';
+
+class Recipe extends RecipeFinder {
   constructor(recipe) {
+    super();
     this.id = recipe.id;
     this.image = recipe.image;
     this.ingredients = recipe.ingredients;

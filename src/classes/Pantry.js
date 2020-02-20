@@ -1,5 +1,8 @@
-class Pantry {
+import RecipeFinder from './RecipeFinder';
+
+class Pantry extends RecipeFinder {
   constructor(contents) {
+    super();
     this.contents = contents;
   }
 
@@ -64,7 +67,7 @@ class Pantry {
       }
       const base = 'https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/';
       const userEndpoint = 'users/wcUsersData'
-      fetch(base + userEndpoint, {
+      window.fetch(base + userEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai, { expect } from 'chai';
 import User from "../src/classes/User";
 import Pantry from "../src/classes/Pantry";
 import Recipe from "../src/classes/Recipe";
@@ -19,6 +19,8 @@ describe("Pantry", function() {
     recipe = new Recipe(mockRecipe);
     pantry = new Pantry(user.pantry);
     mockIngredientsData = mockIngredients.ingredientsData;
+    global.window = {};
+    chai.spy.on(window, 'fetch', () => new Promise((resolve, reject) => {}));
   });
 
   it("should be a function", function() {
@@ -61,6 +63,19 @@ describe("Pantry", function() {
   });
 
   it("should update its contents", function() {
-    expect(pantry.updateIngredients()).to.equal();
+    pantry.updateIngredients(20081, 1.5, 1);
+    const modification = {
+        userID: 1,
+        ingredientID: 20081,
+        ingredientModification: 1.5
+      }
+    expect(window.fetch).to.be.called(1);
+    expect(window.fetch).to.be.called.with('https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/users/wcUsersData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(modification)
+    })
   });
 });
