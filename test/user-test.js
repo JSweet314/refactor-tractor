@@ -124,75 +124,74 @@ describe("User", function() {
       expect(user.recipesToCook.length).to.equal(0);
     });
   });
-
-  it("should be able to filter favorite recipes by tag", function() {
-    user.addRecipe(recipe, "favoriteRecipes");
-    user.addRecipe(recipe2, "favoriteRecipes");
-    user.addRecipe(recipe3, "favoriteRecipes");
-    expect(user.filterRecipes(["snack"], user.favoriteRecipes)).to.deep.equal([
-      recipe,
-      recipe3
-    ]);
-  });
-
-  it("should return an empty array if the tag doesn't match any favorite recipes", function() {
-    user.addRecipe(recipe, "favoriteRecipes");
-    expect(user.filterRecipes(["cupcake"], user.favoriteRecipes)).to.deep.equal(
-      []
-    );
-  });
-
-  it("should be able to filter recipes to cook by tag", function() {
-    user.addRecipe(recipe, "recipesToCook");
-    user.addRecipe(recipe2, "recipesToCook");
-    user.addRecipe(recipe3, "recipesToCook");
-    expect(user.filterRecipes(["lunch"], user.recipesToCook)).to.deep.equal([
-      recipe2
-    ]);
-  });
-
-  it("should return an empty array if the tag doesn't match any recipes to cook", function() {
-    user.addRecipe(recipe, "recipesToCook");
-    expect(user.filterRecipes(["italian"], user.recipesToCook)).to.deep.equal(
-      []
-    );
-  });
-
-  it("should be able to search favorite recipes by name", function() {
-    user.addRecipe(recipe, "favoriteRecipes");
-    user.addRecipe(recipe2, "favoriteRecipes");
-    user.addRecipe(recipe3, "favoriteRecipes");
-    expect(
-      user.searchRecipes(ingredients, "chocolate", user.favoriteRecipes)
-    ).to.deep.equal([recipe]);
-  });
-
-  it("should be able to search favorite recipes by ingredient", function() {
-    user.addRecipe(recipe, "favoriteRecipes");
-    user.addRecipe(recipe2, "favoriteRecipes");
-    user.addRecipe(recipe3, "favoriteRecipes");
-    //16124
-    expect(
-      user.searchRecipes(ingredients, "soy sauce", user.favoriteRecipes)
-    ).to.deep.equal([recipe2]);
-  });
-
-  it("should be able to search recipes to cook by name", function() {
-    user.addRecipe(recipe, "recipesToCook");
-    user.addRecipe(recipe2, "recipesToCook");
-    user.addRecipe(recipe3, "recipesToCook");
-    expect(
-      user.searchRecipes(ingredients, "dijon", user.recipesToCook)
-    ).to.deep.equal([recipe2]);
-  });
-
-  it("should be able to search recipes to cook by ingredient", function() {
-    user.addRecipe(recipe, "recipesToCook");
-    user.addRecipe(recipe2, "recipesToCook");
-    user.addRecipe(recipe3, "recipesToCook");
-    // 2026
-    expect(
-      user.searchRecipes(ingredients, "onion powder", user.recipesToCook)
-    ).to.deep.equal([recipe3]);
-  });
+  // it("should be able to filter favorite recipes by tag", function() {
+  //   user.addRecipe(recipe, "favoriteRecipes");
+  //   user.addRecipe(recipe2, "favoriteRecipes");
+  //   user.addRecipe(recipe3, "favoriteRecipes");
+  //   expect(user.filterRecipes(["snack"], user.favoriteRecipes)).to.deep.equal([
+  //     recipe,
+  //     recipe3
+  //   ]);
+  // });
+  //
+  // it("should return an empty array if the tag doesn't match any favorite recipes", function() {
+  //   user.addRecipe(recipe, "favoriteRecipes");
+  //   expect(user.filterRecipes(["cupcake"], user.favoriteRecipes)).to.deep.equal(
+  //     []
+  //   );
+  // });
+  //
+  // it("should be able to filter recipes to cook by tag", function() {
+  //   user.addRecipe(recipe, "recipesToCook");
+  //   user.addRecipe(recipe2, "recipesToCook");
+  //   user.addRecipe(recipe3, "recipesToCook");
+  //   expect(user.filterRecipes(["lunch"], user.recipesToCook)).to.deep.equal([
+  //     recipe2
+  //   ]);
+  // });
+  //
+  // it("should return an empty array if the tag doesn't match any recipes to cook", function() {
+  //   user.addRecipe(recipe, "recipesToCook");
+  //   expect(user.filterRecipes(["italian"], user.recipesToCook)).to.deep.equal(
+  //     []
+  //   );
+  // });
+  //
+  // it("should be able to search favorite recipes by name", function() {
+  //   user.addRecipe(recipe, "favoriteRecipes");
+  //   user.addRecipe(recipe2, "favoriteRecipes");
+  //   user.addRecipe(recipe3, "favoriteRecipes");
+  //   expect(
+  //     user.searchRecipes(ingredients, "chocolate", user.favoriteRecipes)
+  //   ).to.deep.equal([recipe]);
+  // });
+  //
+  // it("should be able to search favorite recipes by ingredient", function() {
+  //   user.addRecipe(recipe, "favoriteRecipes");
+  //   user.addRecipe(recipe2, "favoriteRecipes");
+  //   user.addRecipe(recipe3, "favoriteRecipes");
+  //   //16124
+  //   expect(
+  //     user.searchRecipes(ingredients, "soy sauce", user.favoriteRecipes)
+  //   ).to.deep.equal([recipe2]);
+  // });
+  //
+  // it("should be able to search recipes to cook by name", function() {
+  //   user.addRecipe(recipe, "recipesToCook");
+  //   user.addRecipe(recipe2, "recipesToCook");
+  //   user.addRecipe(recipe3, "recipesToCook");
+  //   expect(
+  //     user.searchRecipes(ingredients, "dijon", user.recipesToCook)
+  //   ).to.deep.equal([recipe2]);
+  // });
+  //
+  // it("should be able to search recipes to cook by ingredient", function() {
+  //   user.addRecipe(recipe, "recipesToCook");
+  //   user.addRecipe(recipe2, "recipesToCook");
+  //   user.addRecipe(recipe3, "recipesToCook");
+  //   // 2026
+  //   expect(
+  //     user.searchRecipes(ingredients, "onion powder", user.recipesToCook)
+  //   ).to.deep.equal([recipe3]);
+  // });
 });

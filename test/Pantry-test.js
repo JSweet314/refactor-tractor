@@ -19,8 +19,8 @@ describe("Pantry", function() {
     recipe = new Recipe(mockRecipe);
     pantry = new Pantry(user.pantry);
     mockIngredientsData = mockIngredients.ingredientsData;
-    // global.window = {};
-    // chai.spy.on(window, 'fetch', () => {})
+    global.window = {};
+    chai.spy.on(window, 'fetch', () => new Promise((resolve, reject) => {}));
   });
 
   it("should be a function", function() {
