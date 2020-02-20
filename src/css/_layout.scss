@@ -1,7 +1,9 @@
+@import "_variables";
+
 body {
-  background-color: #5B7894;
+  background-color: $primary-bg-color;
   display: grid;
-  font-family: "Quicksand", sans-serif;
+  font-family: $primary-font-family;
   grid-template-columns: 1fr 5fr;
   grid-template-areas:
     "header header"
@@ -20,4 +22,33 @@ main {
   align-content: flex-start;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+aside {
+  display: flex;
+  justify-content: center;
+}
+
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+}
+
+#search {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.card-photo-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
