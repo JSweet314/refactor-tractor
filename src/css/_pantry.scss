@@ -1,25 +1,23 @@
 .drop-menu {
-  align-items: center;
-  background-color: #DAE4EE;
-  display: none;
+  align-items: $center-align;
+  background-color: $tertiary-bg-color;
   height: 600px;
   margin-left: 81%;
   margin-top: 92px;
   overflow: scroll;
   padding: 12px;
   position: absolute;
-  text-align: center;
+  text-align: $center-align;
   width: 250px;
   z-index: 3;
-}
-
-.drop-menu h2 {
-  color: #359567;
-  margin: 0px;
+  & h2 {
+    color: $primary-font-color;
+    margin: 0px;
+  }
 }
 
 .pantry-list {
-  color: #000000;
-  padding-left: 15px;
-  text-align: left;
+  color: $black;
+  padding-left: 1rem;
+  text-align: $left-align;
 }
