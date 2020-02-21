@@ -27,11 +27,10 @@ const dom = {
   },
 
   handleRecipeCardClicks(e) {
-    console.log(e);
     if ($(e.target).hasClass('card-apple-icon')) {
       console.log('apple')
-    } else if ($(e.target) === $('#exit-recipe-button')) {
-      console.log('exit')
+    } else if ($(e.target).attr('id') === 'exit-recipe-btn') {
+      dom.exitRecipe();
     } else if ($(e.target).hasClass('card-photo-preview') || $(e.target).hasClass('text')) {
       dom.renderExpandedRecipeCard(e.data);
     }
@@ -65,6 +64,11 @@ const dom = {
     $('.recipe-instructions').html(recipeHTML);
     $('.recipe-instructions').before(`<section id='overlay'></div>`)
     $('#recipe-title').css('background-image', (`url(${recipe.image})`))
+  },
+
+  exitRecipe() {
+    $('.recipe-instructions').toggleClass('is-hidden');
+    $('#overlay').remove();
   },
 
   renderPantry(pantry) {},
