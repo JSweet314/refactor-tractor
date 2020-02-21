@@ -27,13 +27,34 @@ const dom = {
   },
 
   handleRecipeCardClicks(e) {
-    if ($(e.target).hasClass('card-apple-icon')) {
-      console.log('apple')
+    if ($(e.target).hasClass('card-apple-icon') && $(e.target).hasClass('active')) {
+      dom.removeFromFavorites(e);
+    } else if ($(e.target).hasClass('card-apple-icon')) {
+      dom.addToFavorites(e);
     } else if ($(e.target).attr('id') === 'exit-recipe-btn') {
       dom.exitRecipe();
     } else if ($(e.target).hasClass('card-photo-preview') || $(e.target).hasClass('text')) {
       dom.renderExpandedRecipeCard(e.data);
     }
+  },
+
+  toggleApple(e, action) {
+    const imgEnd = action === 'remove' ? '-outline' : ''
+    let cardId = parseInt($(e.target).parent('.recipe-card').attr('id'));
+    let recipe = e.data.recipes.find(recipe => recipe.id === cardId);
+    $(e.target).attr('src', `./images/apple-logo${imgEnd}.png`)
+    $(e.target).toggleClass('active');
+    return recipe;
+  },
+
+  addToFavorites(e) {
+    let recipe = dom.toggleApple(e);
+    e.data.currentUser.addRecipe(recipe, 'favoriteRecipes');
+  },
+
+  removeFromFavorites(e) {
+    let recipe = dom.toggleApple(e, 'remove');
+    e.data.currentUser.removeRecipe(recipe, 'favoriteRecipes');
   },
 
   renderExpandedRecipeCard(data) {
