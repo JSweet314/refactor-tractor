@@ -49,8 +49,7 @@ const dom = {
     e.data.currentUser.removeRecipe(recipe, 'favoriteRecipes');
   },
 
-  renderExpandedRecipeCard(data) {
-    $('.recipe-instructions').toggleClass('is-hidden');
+  matchRecipeIdWithName(e) {
     // event.path logs the path of the event from the most to least specific
     // The function below then finds the event in that group that has an id and
     // assigned that id to the recipe card
@@ -64,6 +63,12 @@ const dom = {
         unit: ingredient.quantity.unit,
       };
     });
+    return matched;
+  },
+
+  renderExpandedRecipeCard(data) {
+    const matched = dom.matchRecipeIdWithName(e);
+    $('.recipe-instructions').toggleClass('is-hidden');
     let ingredients = matched.map(ingredient => `${capitalize(ingredient.name)} (${ingredient.amount} ${
       ingredient.unit})`);
     let instructions = recipe.getInstructions().map(instr => `<li>${instr.instruction}</li>`)
