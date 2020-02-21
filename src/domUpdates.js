@@ -1,18 +1,10 @@
 import $ from "jquery";
+import Recipe from "./classes/Recipe";
 
 import {
   capitalize,
   getTags
 } from "./lib/utils";
-
-// openRecipeInfo()
-// generateRecipeTitle()
-// addRecipeImage()
-// generateInstructions()
-// exitRecipe()
-// addToMyRecipes()
-// Actually part of the pantry class
-//
 
 const dom = {
   bindEvents(state) {
@@ -128,8 +120,11 @@ const dom = {
     return new Set(filteredRecipes);
   },
 
-  createCards(recipeData) {
-    recipeData.forEach(recipe => {
+  createCards(state) {
+    const favorites = state.currentUser.favoriteRecipes.map(recipe => new Recipe(recipe));
+    const favIds = favorites.map(recipe => recipe.id);
+    state.recipes.forEach(recipe => {
+      const imgEnd = !favIds.includes(recipe.id) ? '-outline' : ''
       const recipeCard = `
         <article class="recipe-card" id=${recipe.id}>
           <h3 maxlength="40">${recipe.name}</h3>
@@ -140,7 +135,7 @@ const dom = {
             <p class="text">Click for Instructions</p>
           </section>
           <h4>${recipe.tags.join(", ")}</h4>
-          <img src="../images/apple-logo-outline.png" alt="unfilled apple icon" class="card-apple-icon">
+          <img src="../images/apple-logo${imgEnd}.png" alt="unfilled apple icon" class="card-apple-icon">
         </article>
       `;
       $("main").append(recipeCard);
