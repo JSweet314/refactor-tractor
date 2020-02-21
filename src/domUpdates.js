@@ -1,19 +1,31 @@
 import $ from "jquery";
 
 const dom = {
-  bindEvents(recipeData) {
-    $(".filter-btn").on('click', function() {
-      dom.handleFilterClick(recipeData)
-    })
+  bindEvents(state) {
+    $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
+
+    $("[data-hook='search--button']").on("click", dom.handleSearchButtonClick);
   },
 
-  displayWelcomeMsg(firstName) {
+  displayWelcomeMsg(state) {
+    const firstName = state.currentUser.name.split(" ", 1);
     $("#user-name").text(firstName);
   },
 
   renderPantry(pantry) {},
 
-  renderTags(tags) {
+  getTags(state) {
+    const tags = state.recipes.reduce((tags, recipe) => {
+      tags.push(...recipe.tags);
+      return tags;
+    }, []);
+
+    return new Set(tags);
+  },
+
+  renderTags(state) {
+    const tags = this.getTags(state);
+
     tags.forEach(tag => {
       const upperCaseTag = tag.charAt(0).toUpperCase() + tag.substring(1);
 
@@ -38,7 +50,7 @@ const dom = {
 
   filterRecipes(selectedTags, recipeData) {
     const filteredRecipes = selectedTags.reduce((list, tag) => {
-      const filtered = recipeData.filter(recipe => {
+      const filtered = recipeData.data.filter(recipe => {
         return recipe.tags.includes(tag);
       });
       return [...list, ...filtered];
@@ -54,20 +66,20 @@ const dom = {
           <h3 maxlength="40">${recipe.name}</h3>
           <section class="card-photo-container">
             <img src=${recipe.image} class="card-photo-preview" alt="${
-  recipe.name
-} recipe" title="${recipe.name} recipe">
+        recipe.name
+      } recipe" title="${recipe.name} recipe">
             <p class="text">Click for Instructions</p>
           </section>
           <h4>${recipe.tags.join(", ")}</h4>
           <img src="../images/apple-logo-outline.png" alt="unfilled apple icon" class="card-apple-icon">
         </article>
       `;
-      $('main').append(recipeCard);
+      $("main").append(recipeCard);
     });
   },
 
   clearCards() {
-    $('main').html('');
+    $("main").html("");
   },
 
   handleFilterClick(recipeData) {
@@ -76,6 +88,11 @@ const dom = {
     const selectedRecipes = dom.filterRecipes(tagIds, recipeData);
     dom.clearCards();
     dom.createCards(selectedRecipes);
+  },
+
+  handleSearchButtonClick(recipeData) {
+    const query = $("[data-hook='input--search']").val();
+    // const list =
   }
 };
 
