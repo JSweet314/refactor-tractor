@@ -6,6 +6,7 @@ import dom from "./domUpdates";
 import { getRandomNumber } from "./lib/utils";
 import User from "./classes/User";
 import Recipe from "./classes/Recipe";
+import RecipeFinder from "./classes/RecipeFinder";
 
 // css
 import "./css/index.scss";
@@ -28,6 +29,7 @@ const userEndpoint = "users/wcUsersData";
 const ingredientEndpoint = "ingredients/ingredientsData";
 const recipeEndpoint = "recipes/recipeData";
 const randomUserId = getRandomNumber();
+const recipeFinder = new RecipeFinder();
 const state = {
   currentUser: null,
   recipes: null
