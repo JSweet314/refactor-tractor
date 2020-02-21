@@ -3,6 +3,7 @@ import $ from "jquery";
 
 // components
 import dom from "./domUpdates";
+import { getRandomNumber } from "./lib/utils";
 import User from "./classes/User";
 import Recipe from "./classes/Recipe";
 
@@ -27,12 +28,10 @@ const userEndpoint = "users/wcUsersData";
 const ingredientEndpoint = "ingredients/ingredientsData";
 const recipeEndpoint = "recipes/recipeData";
 const randomUserId = getRandomNumber();
-
-function getRandomNumber(min = 1, max = 49) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-}
+const state = {
+  currentUser: null,
+  recipes: null
+};
 
 // fetch user
 const getUser = () => {
@@ -50,7 +49,10 @@ const getRecipes = () => {
     .catch(error => console.log(error.message));
 };
 
-const currentUser = getUser().then(user => new User(user));
+const currentUser = getUser().then(user => {
+  state.currentUser = new User(user);
+  return state.currentUser;
+});
 
 currentUser.then(user => {
   const firstName = user.name.split(" ", 1);
@@ -58,9 +60,11 @@ currentUser.then(user => {
 });
 
 const recipes = getRecipes().then(data => {
-  return data.recipeData.map(recipe => {
+  const recipeInstances = data.recipeData.map(recipe => {
     return new Recipe(recipe);
   });
+  state.recipes = recipeInstances;
+  return state.recipes;
 });
 
 recipes
@@ -77,4 +81,4 @@ recipes
     dom.renderTags(new Set(tags));
     dom.bindEvents(data);
     return data;
-  })
+  });
