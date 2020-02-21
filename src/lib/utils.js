@@ -26,3 +26,16 @@ export const getUser = () => {
     .then(response => response.json())
     .catch(error => console.log(error.message));
 };
+
+export const capitalize = (elem) => {
+  return elem.charAt(0).toUpperCase() + elem.substring(1)
+};
+
+export const getTags = (state) => {
+  const tags = state.recipes.reduce((tags, recipe) => {
+    tags.push(...recipe.tags);
+    return tags;
+  }, []);
+
+  return new Set(tags);
+};
