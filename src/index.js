@@ -3,6 +3,7 @@ import $ from "jquery";
 
 // components
 import dom from "./domUpdates";
+import { getRandomNumber } from "./lib/utils";
 import User from "./classes/User";
 import Recipe from "./classes/Recipe";
 
@@ -31,12 +32,6 @@ const state = {
   currentUser: null,
   recipes: null
 };
-
-function getRandomNumber(min = 1, max = 49) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-}
 
 // fetch user
 const getUser = () => {
