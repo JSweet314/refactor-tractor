@@ -1,18 +1,10 @@
 import $ from "jquery";
+import Recipe from "./classes/Recipe";
 
 import {
   capitalize,
   getTags
 } from "./lib/utils";
-
-// openRecipeInfo()
-// generateRecipeTitle()
-// addRecipeImage()
-// generateInstructions()
-// exitRecipe()
-// addToMyRecipes()
-// Actually part of the pantry class
-//
 
 const dom = {
   bindEvents(state) {
@@ -57,8 +49,7 @@ const dom = {
     e.data.currentUser.removeRecipe(recipe, 'favoriteRecipes');
   },
 
-  renderExpandedRecipeCard(data) {
-    $('.recipe-instructions').toggleClass('is-hidden');
+  matchRecipeIdWithName(e) {
     // event.path logs the path of the event from the most to least specific
     // The function below then finds the event in that group that has an id and
     // assigned that id to the recipe card
@@ -72,6 +63,12 @@ const dom = {
         unit: ingredient.quantity.unit,
       };
     });
+    return matched;
+  },
+
+  renderExpandedRecipeCard(data) {
+    const matched = dom.matchRecipeIdWithName(e);
+    $('.recipe-instructions').toggleClass('is-hidden');
     let ingredients = matched.map(ingredient => `${capitalize(ingredient.name)} (${ingredient.amount} ${
       ingredient.unit})`);
     let instructions = recipe.getInstructions().map(instr => `<li>${instr.instruction}</li>`)
@@ -128,8 +125,11 @@ const dom = {
     return new Set(filteredRecipes);
   },
 
-  createCards(recipeData) {
-    recipeData.forEach(recipe => {
+  createCards(state) {
+    const favorites = state.currentUser.favoriteRecipes.map(recipe => new Recipe(recipe));
+    const favIds = favorites.map(recipe => recipe.id);
+    state.recipes.forEach(recipe => {
+      const imgEnd = !favIds.includes(recipe.id) ? '-outline' : ''
       const recipeCard = `
         <article class="recipe-card" id=${recipe.id}>
           <h3 maxlength="40">${recipe.name}</h3>
@@ -140,7 +140,7 @@ const dom = {
             <p class="text">Click for Instructions</p>
           </section>
           <h4>${recipe.tags.join(", ")}</h4>
-          <img src="../images/apple-logo-outline.png" alt="unfilled apple icon" class="card-apple-icon">
+          <img src="../images/apple-logo${imgEnd}.png" alt="unfilled apple icon" class="card-apple-icon">
         </article>
       `;
       $("main").append(recipeCard);
