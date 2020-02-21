@@ -1,6 +1,11 @@
 // ---------- libs ----------
 import $ from "jquery";
-import { getRandomNumber } from "./lib/utils";
+import {
+  getIngredients,
+  getRandomNumber,
+  getRecipes,
+  getUser
+} from "./lib/utils";
 
 // ---------- components ----------
 import dom from "./domUpdates";
@@ -24,82 +29,31 @@ import "./images/search.png";
 import "./images/seasoning.png";
 
 // ---------- globals ----------
-const base = "https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/";
-const userEndpoint = "users/wcUsersData";
-const ingredientEndpoint = "ingredients/ingredientsData";
-const recipeEndpoint = "recipes/recipeData";
-const randomUserId = getRandomNumber();
 const recipeFinder = new RecipeFinder();
+const randomUserId = getRandomNumber();
 const state = {
   currentUser: null,
   recipes: null,
   ingredients: null
 };
 
-// ---------- fetch user ----------
-const getUser = () => {
-  return fetch(base + userEndpoint)
-    .then(response => response.json())
-    .then(data => data.wcUsersData[randomUserId])
-    .catch(error => console.log(error.message));
-};
+const users = getUser();
+const recipes = getRecipes();
+const ingredients = getIngredients();
 
-getUser()
-  .then(user => {
-    state.currentUser = new User(user);
-    return state.currentUser;
-  })
-  .then(user => {
-    const firstName = user.name.split(" ", 1);
-    dom.displayWelcomeMsg(firstName);
-  });
+// ---------- after all fetches complete ----------
+Promise.all([users, recipes, ingredients]).then(data => {
+  const user = new User(data[0].wcUsersData[randomUserId]);
+  const recipes = data[1].recipeData.map(recipe => new Recipe(recipe));
+  const ingredients = data[2].ingredientsData;
 
-// ---------- fetch recipes ----------
-const getRecipes = () => {
-  return fetch(base + recipeEndpoint)
-    .then(response => response.json())
-    .then(data => data)
-    .catch(error => console.log(error.message));
-};
+  state.currentUser = user;
+  state.recipes = recipes;
+  state.ingredients = ingredients;
 
-getRecipes()
-  .then(data => {
-    const recipeInstances = data.recipeData.map(recipe => {
-      return new Recipe(recipe);
-    });
-    state.recipes = recipeInstances;
-    return state.recipes;
-  })
-  .then(data => {
-    dom.createCards(data);
-    return data;
-  })
-  .then(data => {
-    const tags = data.reduce((tags, recipe) => {
-      tags.push(...recipe.tags);
-      return tags;
-    }, []);
+  dom.displayWelcomeMsg(state);
+  dom.createCards(state);
 
-    dom.renderTags(new Set(tags));
-    dom.bindEvents(state);
-    return data;
-  });
-
-// ---------- fetch ingredients ----------
-const getIngredients = () => {
-  return fetch(base + ingredientEndpoint)
-    .then(response => response.json())
-    .then(data => {
-      state.ingredients = data.ingredientsData;
-      return state.ingredients;
-    })
-    .catch(error => console.log(error.message));
-};
-
-getIngredients();
-
-// event listener for search bar
-// handler will invoke my recipeFinder methods
-// it will take in query is the query
-// the list is the recipes
-// the data is the ingredients
+  dom.renderTags(state);
+  dom.bindEvents(state);
+});

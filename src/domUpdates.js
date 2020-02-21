@@ -7,13 +7,25 @@ const dom = {
     $("[data-hook='search--button']").on("click", dom.handleSearchButtonClick);
   },
 
-  displayWelcomeMsg(firstName) {
+  displayWelcomeMsg(state) {
+    const firstName = state.currentUser.name.split(" ", 1);
     $("#user-name").text(firstName);
   },
 
   renderPantry(pantry) {},
 
-  renderTags(tags) {
+  getTags(state) {
+    const tags = state.recipes.reduce((tags, recipe) => {
+      tags.push(...recipe.tags);
+      return tags;
+    }, []);
+
+    return new Set(tags);
+  },
+
+  renderTags(state) {
+    const tags = this.getTags(state);
+
     tags.forEach(tag => {
       const upperCaseTag = tag.charAt(0).toUpperCase() + tag.substring(1);
 
@@ -47,8 +59,8 @@ const dom = {
     return new Set(filteredRecipes);
   },
 
-  createCards(recipeData) {
-    recipeData.forEach(recipe => {
+  createCards(state) {
+    state.recipes.forEach(recipe => {
       const recipeCard = `
         <article class="recipe-card" id=${recipe.id}>
           <h3 maxlength="40">${recipe.name}</h3>
