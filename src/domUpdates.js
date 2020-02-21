@@ -53,13 +53,18 @@ const dom = {
       };
     });
     let ingredients = matched.map(ingredient => `${capitalize(ingredient.name)} (${ingredient.amount} ${
-      ingredient.unit})`)
-    let recipeTitle = `
+      ingredient.unit})`);
+    let instructions = recipe.getInstructions().map(instr => `<li>${instr.instruction}</li>`)
+    let recipeHTML = `
       <button class="button button--close-recipe" id="exit-recipe-btn">X</button>
       <h3 id="recipe-title">${recipe.name}</h3>
       <h4>Ingredients</h4>
-      <p>${ingredients.join(', ')}</p>`;
-    $('.recipe-instructions').html(recipeTitle);
+      <p>${ingredients.join(', ')}</p>
+      <h4>Instructions</h4>
+      <ol>${instructions.join('')}</ol>`;
+    $('.recipe-instructions').html(recipeHTML);
+    $('.recipe-instructions').before(`<section id='overlay'></div>`)
+    $('#recipe-title').css('background-image', (`url(${recipe.image})`))
   },
 
   renderPantry(pantry) {},
