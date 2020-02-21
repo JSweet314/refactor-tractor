@@ -43,7 +43,7 @@ const ingredients = getIngredients();
 
 // ---------- after all fetches complete ----------
 Promise.all([users, recipes, ingredients]).then(data => {
-  const user = new User(data[0].wcUsersData[1]);
+  const user = new User(data[0].wcUsersData[randomUserId]);
   const recipes = data[1].recipeData.map(recipe => new Recipe(recipe));
   const ingredients = data[2].ingredientsData;
 
