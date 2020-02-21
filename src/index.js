@@ -81,7 +81,7 @@ getRecipes()
     }, []);
 
     dom.renderTags(new Set(tags));
-    dom.bindEvents(data);
+    dom.bindEvents(state);
     return data;
   });
 
