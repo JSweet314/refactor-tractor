@@ -59,8 +59,8 @@ const dom = {
     return new Set(filteredRecipes);
   },
 
-  createCards(state) {
-    state.recipes.forEach(recipe => {
+  createCards(recipeData) {
+    recipeData.forEach(recipe => {
       const recipeCard = `
         <article class="recipe-card" id=${recipe.id}>
           <h3 maxlength="40">${recipe.name}</h3>
