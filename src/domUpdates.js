@@ -7,6 +7,7 @@ import Recipe from "./classes/Recipe";
 import RecipeFinder from "./classes/RecipeFinder";
 
 const dom = {
+  // ---------- on app init ----------
   init(state) {
     dom.displayWelcomeMsg(state);
     dom.createCards(state.recipes, state.currentUser);
@@ -14,11 +15,7 @@ const dom = {
     dom.bindEvents(state);
   },
 
-  addToFavorites(e) {
-    let recipe = dom.toggleApple(e);
-    e.data.currentUser.addRecipe(recipe, "favoriteRecipes");
-  },
-
+  // ---------- event listeners ----------
   bindEvents(state) {
     $(".filter-btn").on("click", () => {
       dom.handleFilterClick(state);
@@ -37,9 +34,13 @@ const dom = {
     });
   },
 
-  displayWelcomeMsg(state) {
-    const firstName = state.currentUser.name.split(" ", 1);
-    $("#user-name").text(firstName);
+  // ---------- event handlers ----------
+  handleFilterClick(state) {
+    const selectedTags = $(dom.filterTags()).toArray();
+    const tagIds = selectedTags.map(tag => tag.id);
+    const selectedRecipes = dom.filterRecipes(tagIds, state.recipes);
+    dom.clearCards();
+    dom.createCards(selectedRecipes, state.currentUser);
   },
 
   handleRecipeCardClicks(e) {
@@ -60,104 +61,34 @@ const dom = {
     }
   },
 
-  toggleApple(e, action) {
-    const imgEnd = action === "remove" ? "-outline" : "";
-    let cardId = parseInt(
-      $(e.target)
-        .parent(".recipe-card")
-        .attr("id")
+  handleSearchSubmit(e, state) {
+    e.preventDefault();
+    const recipeFinder = new RecipeFinder();
+    const query = $("[data-hook='input--search']").val();
+    const queryResults = recipeFinder.searchRecipes(
+      state.ingredients,
+      query,
+      state.recipes
     );
-    let recipe = e.data.recipes.find(recipe => recipe.id === cardId);
-    $(e.target).attr("src", `./images/apple-logo${imgEnd}.png`);
-    $(e.target).toggleClass("active");
-    return recipe;
+
+    dom.clearCards();
+    dom.createCards(queryResults, state.currentUser);
+    $("[data-hook='input--search']").val("");
   },
 
-  removeFromFavorites(e) {
-    let recipe = dom.toggleApple(e, "remove");
-    e.data.currentUser.removeRecipe(recipe, "favoriteRecipes");
+  handleShowAllClick(e, state) {
+    dom.clearCards();
+    dom.createCards(state.recipes, state.currentUser);
   },
 
-  matchRecipeIdWithName(e) {
-    // event.path logs the path of the event from the most to least specific
-    // The function below then finds the event in that group that has an id and
-    // assigned that id to the recipe card
-    let recipeId = parseInt(event.path.find(e => e.id).id);
-    let recipe = data.recipes.find(recipe => recipe.id === recipeId);
-    const matched = recipe.ingredients.map(ingredient => {
-      let match = data.ingredients.find(ingr => ingr.id === ingredient.id);
-      return {
-        name: match.name,
-        amount: ingredient.quantity.amount,
-        unit: ingredient.quantity.unit
-      };
-    });
-    return matched;
+  // ---------- dom methods ----------
+  addToFavorites(e) {
+    let recipe = dom.toggleApple(e);
+    e.data.currentUser.addRecipe(recipe, "favoriteRecipes");
   },
 
-  renderExpandedRecipeCard(data) {
-    const matched = dom.matchRecipeIdWithName(e);
-    $(".recipe-instructions").toggleClass("is-hidden");
-    let ingredients = matched.map(
-      ingredient =>
-        `${capitalize(ingredient.name)} (${ingredient.amount} ${
-          ingredient.unit
-        })`
-    );
-    let instructions = recipe
-      .getInstructions()
-      .map(instr => `<li>${instr.instruction}</li>`);
-    let recipeHTML = `
-      <button class="button button--close-recipe" id="exit-recipe-btn">X</button>
-      <h3 id="recipe-title">${recipe.name}</h3>
-      <h4>Ingredients</h4>
-      <p>${ingredients.join(", ")}</p>
-      <h4>Instructions</h4>
-      <ol>${instructions.join("")}</ol>`;
-    $(".recipe-instructions").html(recipeHTML);
-    $(".recipe-instructions").before(`<section id='overlay'></div>`);
-    $("#recipe-title").css("background-image", `url(${recipe.image})`);
-  },
-
-  exitRecipe() {
-    $(".recipe-instructions").toggleClass("is-hidden");
-    $("#overlay").remove();
-  },
-
-  renderPantry(pantry) {},
-
-  renderTags(state) {
-    const tags = getTags(state);
-    tags.forEach(tag => {
-      const upperCaseTag = capitalize(tag);
-
-      let tagHtml = `
-        <li>
-          <input type="checkbox" class="checked-tag" id="${tag}">
-          <label for="${tag}">${upperCaseTag}</label>
-        </li>
-      `;
-      $(".tag-list").append(tagHtml);
-    });
-  },
-
-  filterTags() {
-    return $(".checked-tag")
-      .toArray()
-      .filter(checkbox => {
-        return $(checkbox).is(":checked");
-      });
-  },
-
-  filterRecipes(selectedTags, recipeData) {
-    const filteredRecipes = selectedTags.reduce((list, tag) => {
-      const filtered = recipeData.filter(recipe => {
-        return recipe.tags.includes(tag);
-      });
-      return [...list, ...filtered];
-    }, []);
-
-    return new Set(filteredRecipes);
+  clearCards() {
+    $("main").html("");
   },
 
   createCards(recipeData, userData) {
@@ -187,53 +118,110 @@ const dom = {
     });
   },
 
-  clearCards() {
-    $("main").html("");
+  displayWelcomeMsg(state) {
+    const firstName = state.currentUser.name.split(" ", 1);
+    $("#user-name").text(firstName);
   },
 
-  handleFilterClick(state) {
-    const selectedTags = $(dom.filterTags()).toArray();
-    const tagIds = selectedTags.map(tag => tag.id);
-    const selectedRecipes = dom.filterRecipes(tagIds, state.recipes);
-    dom.clearCards();
-    dom.createCards(selectedRecipes, state.currentUser);
+  exitRecipe() {
+    $(".recipe-instructions").toggleClass("is-hidden");
+    $("#overlay").remove();
   },
 
-  handleSearchSubmit(e, state) {
-    e.preventDefault();
-    const recipeFinder = new RecipeFinder();
-    const query = $("[data-hook='input--search']").val();
-    const queryResults = recipeFinder.searchRecipes(
-      state.ingredients,
-      query,
-      state.recipes
+  filterRecipes(selectedTags, recipeData) {
+    const filteredRecipes = selectedTags.reduce((list, tag) => {
+      const filtered = recipeData.filter(recipe => {
+        return recipe.tags.includes(tag);
+      });
+      return [...list, ...filtered];
+    }, []);
+
+    return new Set(filteredRecipes);
+  },
+
+  filterTags() {
+    return $(".checked-tag")
+      .toArray()
+      .filter(checkbox => {
+        return $(checkbox).is(":checked");
+      });
+  },
+
+  matchRecipeIdWithName(e) {
+    // event.path logs the path of the event from the most to least specific
+    // The function below then finds the event in that group that has an id and
+    // assigned that id to the recipe card
+    let recipeId = parseInt(event.path.find(e => e.id).id);
+    let recipe = data.recipes.find(recipe => recipe.id === recipeId);
+    const matched = recipe.ingredients.map(ingredient => {
+      let match = data.ingredients.find(ingr => ingr.id === ingredient.id);
+      return {
+        name: match.name,
+        amount: ingredient.quantity.amount,
+        unit: ingredient.quantity.unit
+      };
+    });
+    return matched;
+  },
+
+  removeFromFavorites(e) {
+    let recipe = dom.toggleApple(e, "remove");
+    e.data.currentUser.removeRecipe(recipe, "favoriteRecipes");
+  },
+
+  renderExpandedRecipeCard(data) {
+    const matched = dom.matchRecipeIdWithName(e);
+    $(".recipe-instructions").toggleClass("is-hidden");
+    let ingredients = matched.map(
+      ingredient =>
+        `${capitalize(ingredient.name)} (${ingredient.amount} ${
+          ingredient.unit
+        })`
     );
-
-    dom.clearCards();
-    dom.createCards(queryResults, state.currentUser);
-    $("[data-hook='input--search']").val("");
+    let instructions = recipe
+      .getInstructions()
+      .map(instr => `<li>${instr.instruction}</li>`);
+    let recipeHTML = `
+      <button class="button button--close-recipe" id="exit-recipe-btn">X</button>
+      <h3 id="recipe-title">${recipe.name}</h3>
+      <h4>Ingredients</h4>
+      <p>${ingredients.join(", ")}</p>
+      <h4>Instructions</h4>
+      <ol>${instructions.join("")}</ol>`;
+    $(".recipe-instructions").html(recipeHTML);
+    $(".recipe-instructions").before(`<section id='overlay'></div>`);
+    $("#recipe-title").css("background-image", `url(${recipe.image})`);
   },
 
-  handleShowAllClick(e, state) {
-    dom.clearCards();
-    dom.createCards(state.recipes, state.currentUser);
+  renderPantry(pantry) {},
+
+  renderTags(state) {
+    const tags = getTags(state);
+    tags.forEach(tag => {
+      const upperCaseTag = capitalize(tag);
+
+      let tagHtml = `
+        <li>
+          <input type="checkbox" class="checked-tag" id="${tag}">
+          <label for="${tag}">${upperCaseTag}</label>
+        </li>
+      `;
+      $(".tag-list").append(tagHtml);
+    });
+  },
+
+  toggleApple(e, action) {
+    const imgEnd = action === "remove" ? "-outline" : "";
+    let cardId = parseInt(
+      $(e.target)
+        .parent(".recipe-card")
+        .attr("id")
+    );
+    let recipe = e.data.recipes.find(recipe => recipe.id === cardId);
+    $(e.target).attr("src", `./images/apple-logo${imgEnd}.png`);
+    $(e.target).toggleClass("active");
+    return recipe;
   }
 };
 
 export default dom;
-
-// TODO move this method to the DOM? Was in Pantry
-// return namedIngredients.map(ingr => {
-//   if (ingr.amount < 0) {
-//     const message = `You need ${Math.abs(ingr.amount)} more ${
-//       ingr.unit
-//     } of ${ingr.name}.
-//     It will cost you $${(Math.abs(ingr.amount) * ingr.cost) / 100}`;
-//     console.log(message);
-//     return message;
-//   } else {
-//     const message = `You have plenty of ${ingr.name}`;
-//     console.log(message);
-//     return message;
-//   }
-// });
