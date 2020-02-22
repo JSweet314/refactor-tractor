@@ -4,27 +4,27 @@ import {
   getRandomNumber,
   getRecipes,
   getUser
-} from "./lib/utils";
+} from './lib/utils';
 
 // ---------- components ----------
-import dom from "./domUpdates";
-import User from "./classes/User";
-import Recipe from "./classes/Recipe";
+import dom from './domUpdates';
+import User from './classes/User';
+import Recipe from './classes/Recipe';
 
 // ---------- css ----------
-import "./css/index.scss";
+import './css/index.scss';
 
 // ---------- images ----------
-import "./images/apple-logo.png";
-import "./images/search.png";
-import "./images/cookbook.png";
-import "./images/seasoning.png";
-import "./images/apple-logo-outline.png";
-import "./images/chicken-parm.jpg";
-import "./images/green-apples.jpg";
-import "./images/pancakes.jpg";
-import "./images/search.png";
-import "./images/seasoning.png";
+import './images/apple-logo.png';
+import './images/search.png';
+import './images/cookbook.png';
+import './images/seasoning.png';
+import './images/apple-logo-outline.png';
+import './images/chicken-parm.jpg';
+import './images/green-apples.jpg';
+import './images/pancakes.jpg';
+import './images/search.png';
+import './images/seasoning.png';
 
 const randomUserId = getRandomNumber();
 const state = {
