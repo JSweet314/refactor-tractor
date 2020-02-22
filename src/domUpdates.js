@@ -94,47 +94,27 @@ const dom = {
   },
 
   findPantryInfo(state) {
+    let pantryInfo = [];
     state.data.currentUser.pantry.contents.forEach(item => {
       let itemInfo = state.data.ingredients.find(ingredient => {
         return item.ingredient === ingredient.id
       })
-      // console.log(itemInfo)
-      let originalIngredient = state.data.currentUser.pantry.contents.find(pantryIngredient => {
-        // console.log(pantryIngredient)
-        if (itemInfo) {
-          return pantryIngredient.ingredient === itemInfo.id;
-        }
-      });
-      console.log(originalIngredient)
-      console.log(itemInfo)
-      });
-      // if (itemInfo && originalIngredient) {
-      //   originalIngredient.count += item.amount;
-      // } else if (itemInfo) {
-      //   pantryInfo.push({ name: itemInfo.name, count: item.amount });
-      // }
-
-    dom.renderPantry();
-    // renderPantry(pantryInfo.sort((a, b) => a.name.localeCompare(b.name)));
+       if (itemInfo) {
+        pantryInfo.push({ name: itemInfo.name, count: item.amount });
+      }
+    })
+    dom.renderPantry(pantryInfo);
   },
 
   renderPantry(pantry) {
     $('.drop-menu').toggleClass('is-hidden');
-    // $('.pantry-list').html(`<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
-    // //       <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`);
-    $('.pantry-list').html(`<li><input type="checkbox" class="pantry-checkbox" id="1">
-    //       <label for="pizza">pizza, 2</label></li>`);
+    pantry.forEach(ingredient => {
+      console.log(ingredient)
+      let ingredientHtml = `<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
+      <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`;
+      $('.pantry-list').prepend(ingredientHtml);
+    });
   },
-
-  // renderPantry(pantry) {
-  //   pantry.forEach(ingredient => {
-  //     let ingredientHtml = `<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
-  //       <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`;
-  //     document
-  //       .querySelector(".pantry-list")
-  //       .insertAdjacentHTML("beforeend", ingredientHtml);
-  //   });
-  // },
 
   renderTags(state) {
     const tags = getTags(state);
