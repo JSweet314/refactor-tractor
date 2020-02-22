@@ -18,7 +18,7 @@ const dom = {
   bindEvents(state) {
     $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
     $('main').on('click', null, state, dom.handleRecipeCardClicks);
-    $('.pantry-btn').on('click', null, state.pantry, dom.findPantryInfo);
+    $('.pantry-btn').on('click', null, state, dom.findPantryInfo);
     $("[data-hook='search--button']").on("click", dom.handleSearchButtonClick);
   },
 
@@ -93,28 +93,34 @@ const dom = {
     $('#overlay').remove();
   },
 
-  findPantryInfo() {
-    // user.pantry.forEach(item => {
-    //   let itemInfo = ingredientsData.find(ingredient => {
-    //     return ingredient.id === item.ingredient;
-    //   });
-    //   let originalIngredient = pantryInfo.find(ingredient => {
-    //     if (itemInfo) {
-    //       return ingredient.name === itemInfo.name;
-    //     }
-    //   });
-    //   if (itemInfo && originalIngredient) {
-    //     originalIngredient.count += item.amount;
-    //   } else if (itemInfo) {
-    //     pantryInfo.push({ name: itemInfo.name, count: item.amount });
-    //   }
-    // });
+  findPantryInfo(state) {
+    state.data.currentUser.pantry.contents.forEach(item => {
+      let itemInfo = state.data.ingredients.find(ingredient => {
+        return item.ingredient === ingredient.id
+      })
+      console.log(itemInfo)
+      // let itemInfo = item.ingredient === state.data.ingredients.id;
+      // console.log(itemInfo)
+      // let itemInfo = item.find(ingredient => {
+      //   return ingredient.id === item.ingredient;
+      });
+      // let originalIngredient = pantryInfo.find(ingredient => {
+      //   if (itemInfo) {
+      //     return ingredient.name === itemInfo.name;
+      //   }
+      // });
+      // if (itemInfo && originalIngredient) {
+      //   originalIngredient.count += item.amount;
+      // } else if (itemInfo) {
+      //   pantryInfo.push({ name: itemInfo.name, count: item.amount });
+      // }
+
     dom.renderPantry();
     // renderPantry(pantryInfo.sort((a, b) => a.name.localeCompare(b.name)));
   },
 
-  renderPantry() {
-    $('.drop-menu').removeClass('is-hidden');
+  renderPantry(pantry) {
+    $('.drop-menu').toggleClass('is-hidden');
     // $('.pantry-list').html(`<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
     // //       <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`);
     $('.pantry-list').html(`<li><input type="checkbox" class="pantry-checkbox" id="1">
