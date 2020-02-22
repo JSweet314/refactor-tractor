@@ -88,7 +88,7 @@ const dom = {
   },
 
   clearCards() {
-    $("main").html("");
+    $("main").empty();
   },
 
   createCards(recipeData, userData) {

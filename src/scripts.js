@@ -88,6 +88,7 @@ function findCheckedPantryBoxes() {
   let selectedIngredients = pantryCheckboxInfo.filter(box => {
     return box.checked;
   });
+
   showAllRecipes();
   if (selectedIngredients.length > 0) {
     findRecipesWithCheckedIngredients(selectedIngredients);
