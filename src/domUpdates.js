@@ -9,32 +9,32 @@ import RecipeFinder from "./classes/RecipeFinder";
 const dom = {
   init(state) {
     dom.displayWelcomeMsg(state);
-    dom.createCards(state);
+    dom.createCards(state.recipes, state.currentUser);
     dom.renderTags(state);
     dom.bindEvents(state);
   },
 
+  addToFavorites(e) {
+    let recipe = dom.toggleApple(e);
+    e.data.currentUser.addRecipe(recipe, "favoriteRecipes");
+  },
+
   bindEvents(state) {
-    $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
-    $("main").on("click", null, state, dom.handleRecipeCardClicks);
-    $("[data-hook='button--search']").on(
-      "click",
-      null,
-      state,
-      dom.handleSearchSubmit
-    );
-    $("[data-hook='input--search']").on(
-      "submit",
-      "#search",
-      state,
-      dom.handleSearchSubmit
-    );
-    $('[data-hook="button--show-all"]').on(
-      "click",
-      null,
-      state,
-      dom.handleShowAllClick
-    );
+    $(".filter-btn").on("click", () => {
+      dom.handleFilterClick(state);
+    });
+    $("main").on("click", () => {
+      dom.handleRecipeCardClicks(state);
+    });
+    $("[data-hook='button--search']").on("click", e => {
+      dom.handleSearchSubmit(e, state);
+    });
+    $("[data-hook='input--search']").on("submit", "#search", e => {
+      dom.handleSearchSubmit(e, state);
+    });
+    $('[data-hook="button--show-all"]').on("click", e => {
+      dom.handleShowAllClick(e, state);
+    });
   },
 
   displayWelcomeMsg(state) {
@@ -71,11 +71,6 @@ const dom = {
     $(e.target).attr("src", `./images/apple-logo${imgEnd}.png`);
     $(e.target).toggleClass("active");
     return recipe;
-  },
-
-  addToFavorites(e) {
-    let recipe = dom.toggleApple(e);
-    e.data.currentUser.addRecipe(recipe, "favoriteRecipes");
   },
 
   removeFromFavorites(e) {
@@ -156,7 +151,7 @@ const dom = {
 
   filterRecipes(selectedTags, recipeData) {
     const filteredRecipes = selectedTags.reduce((list, tag) => {
-      const filtered = recipeData.data.filter(recipe => {
+      const filtered = recipeData.filter(recipe => {
         return recipe.tags.includes(tag);
       });
       return [...list, ...filtered];
@@ -165,13 +160,12 @@ const dom = {
     return new Set(filteredRecipes);
   },
 
-  createCards(e) {
-    console.log(e.data);
-    const favorites = e.data.currentUser.favoriteRecipes.map(
+  createCards(recipeData, userData) {
+    const favorites = userData.favoriteRecipes.map(
       recipe => new Recipe(recipe)
     );
     const favIds = favorites.map(recipe => recipe.id);
-    e.data.recipes.forEach(recipe => {
+    recipeData.forEach(recipe => {
       const imgEnd = !favIds.includes(recipe.id) ? "-outline" : "";
       const recipeCard = `
         <article class="recipe-card" id=${recipe.id}>
@@ -187,8 +181,8 @@ const dom = {
           <img src="../images/apple-logo${imgEnd}.png"
                alt="unfilled apple icon"
                class="card-apple-icon">
-        </article>
-      `;
+          </article>
+          `;
       $("main").append(recipeCard);
     });
   },
@@ -197,32 +191,32 @@ const dom = {
     $("main").html("");
   },
 
-  handleFilterClick(recipeData) {
+  handleFilterClick(state) {
     const selectedTags = $(dom.filterTags()).toArray();
     const tagIds = selectedTags.map(tag => tag.id);
-    const selectedRecipes = dom.filterRecipes(tagIds, recipeData);
+    const selectedRecipes = dom.filterRecipes(tagIds, state.recipes);
     dom.clearCards();
-    dom.createCards(selectedRecipes);
+    dom.createCards(selectedRecipes, state.currentUser);
   },
 
-  handleSearchSubmit(e) {
+  handleSearchSubmit(e, state) {
     e.preventDefault();
     const recipeFinder = new RecipeFinder();
     const query = $("[data-hook='input--search']").val();
     const queryResults = recipeFinder.searchRecipes(
-      e.data.ingredients,
+      state.ingredients,
       query,
-      e.data.recipes
+      state.recipes
     );
 
     dom.clearCards();
-    dom.createCards(queryResults);
+    dom.createCards(queryResults, state.currentUser);
     $("[data-hook='input--search']").val("");
   },
 
-  handleShowAllClick(state) {
+  handleShowAllClick(e, state) {
     dom.clearCards();
-    dom.createCards(state);
+    dom.createCards(state.recipes, state.currentUser);
   }
 };
 
