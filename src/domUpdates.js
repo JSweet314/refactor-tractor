@@ -17,7 +17,8 @@ import {
 const dom = {
   bindEvents(state) {
     $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
-    $('main').on('click', null, state, dom.handleRecipeCardClicks)
+    $('main').on('click', null, state, dom.handleRecipeCardClicks);
+    $('.pantry-btn').on('click', null, state.pantry, dom.findPantryInfo);
     $("[data-hook='search--button']").on("click", dom.handleSearchButtonClick);
   },
 
@@ -92,7 +93,42 @@ const dom = {
     $('#overlay').remove();
   },
 
-  renderPantry(pantry) {},
+  findPantryInfo() {
+    // user.pantry.forEach(item => {
+    //   let itemInfo = ingredientsData.find(ingredient => {
+    //     return ingredient.id === item.ingredient;
+    //   });
+    //   let originalIngredient = pantryInfo.find(ingredient => {
+    //     if (itemInfo) {
+    //       return ingredient.name === itemInfo.name;
+    //     }
+    //   });
+    //   if (itemInfo && originalIngredient) {
+    //     originalIngredient.count += item.amount;
+    //   } else if (itemInfo) {
+    //     pantryInfo.push({ name: itemInfo.name, count: item.amount });
+    //   }
+    // });
+    dom.renderPantry();
+    // renderPantry(pantryInfo.sort((a, b) => a.name.localeCompare(b.name)));
+  },
+
+  renderPantry() {
+    // $('.pantry-list').html(`<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
+    // //       <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`);
+    $('.pantry-list').html(`<li><input type="checkbox" class="pantry-checkbox" id="1">
+    //       <label for="pizza">pizza, 2</label></li>`);
+  },
+
+  // renderPantry(pantry) {
+  //   pantry.forEach(ingredient => {
+  //     let ingredientHtml = `<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
+  //       <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`;
+  //     document
+  //       .querySelector(".pantry-list")
+  //       .insertAdjacentHTML("beforeend", ingredientHtml);
+  //   });
+  // },
 
   renderTags(state) {
     const tags = getTags(state);
