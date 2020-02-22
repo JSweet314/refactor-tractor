@@ -125,25 +125,28 @@ const dom = {
       });
   },
 
-  findCheckedPantryBoxes() {
+  findCheckedPantryBoxes(state) {
     const selectedIngredients = $(dom.filterPantry()).toArray();
     console.log(selectedIngredients);
     // showAllRecipes();
     if (selectedIngredients.length > 0) {
-      dom.findRecipesWithCheckedIngredients(selectedIngredients);
+      dom.findRecipesWithCheckedIngredients(selectedIngredients, state);
     }
   },
 
-  findRecipesWithCheckedIngredients(selected) {
+  findRecipesWithCheckedIngredients(selected, state) {
     let recipeChecker = (arr, target) => target.every(v => arr.includes(v));
     let ingredientNames = selected.map(item => {
       return item.id;
     });
-    recipes.forEach(recipe => {
+    // console.log(ingredientNames)
+    state.data.recipes.forEach(recipe => {
       let allRecipeIngredients = [];
       recipe.ingredients.forEach(ingredient => {
+        console.log(ingredient)
         allRecipeIngredients.push(ingredient.name);
       });
+      // console.log(allRecipeIngredients)
       if (!recipeChecker(allRecipeIngredients, ingredientNames)) {
         let domRecipe = document.getElementById(`${recipe.id}`);
         domRecipe.style.display = "none";
