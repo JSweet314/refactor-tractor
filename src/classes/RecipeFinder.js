@@ -15,12 +15,12 @@ class RecipeFinder {
     return filtered;
   }
 
-  searchRecipes(data, query, list) {
+  searchRecipes(ingredientData, query, recipes) {
     query = query.toLowerCase();
-    return list.filter(recipe => {
+    return recipes.filter(recipe => {
       const recipeName = recipe.name.toLowerCase();
       const recipeIngredients = recipe.ingredients.map(ingredient => {
-        let match = data.find(ingr => ingr.id === ingredient.id);
+        let match = ingredientData.find(ingr => ingr.id === ingredient.id);
         return match.name.toLowerCase();
       });
       return recipeName.includes(query) || recipeIngredients.includes(query);

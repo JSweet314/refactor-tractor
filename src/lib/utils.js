@@ -1,10 +1,16 @@
-const base = "https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/";
-const userEndpoint = "users/wcUsersData";
-const ingredientEndpoint = "ingredients/ingredientsData";
-const recipeEndpoint = "recipes/recipeData";
+import {
+  BASE,
+  USER_ENDPOINT,
+  RECIPE_ENDPOINT,
+  INGREDIENT_ENDPOINT
+} from "../constants/constants";
+
+export const capitalize = elem => {
+  return elem.charAt(0).toUpperCase() + elem.substring(1);
+};
 
 export const getIngredients = () => {
-  return fetch(base + ingredientEndpoint)
+  return fetch(BASE + INGREDIENT_ENDPOINT)
     .then(response => response.json())
     .catch(error => console.log(error.message));
 };
@@ -16,22 +22,18 @@ export function getRandomNumber(min = 1, max = 49) {
 }
 
 export const getRecipes = () => {
-  return fetch(base + recipeEndpoint)
+  return fetch(BASE + RECIPE_ENDPOINT)
     .then(response => response.json())
     .catch(error => console.log(error.message));
 };
 
 export const getUser = () => {
-  return fetch(base + userEndpoint)
+  return fetch(BASE + USER_ENDPOINT)
     .then(response => response.json())
     .catch(error => console.log(error.message));
 };
 
-export const capitalize = (elem) => {
-  return elem.charAt(0).toUpperCase() + elem.substring(1)
-};
-
-export const getTags = (state) => {
+export const getTags = state => {
   const tags = state.recipes.reduce((tags, recipe) => {
     tags.push(...recipe.tags);
     return tags;

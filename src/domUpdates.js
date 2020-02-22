@@ -1,52 +1,150 @@
+// libs
 import $ from "jquery";
-import Recipe from "./classes/Recipe";
+import { capitalize, getTags } from "./lib/utils";
 
-import {
-  capitalize,
-  getTags
-} from "./lib/utils";
+// components
+import Recipe from "./classes/Recipe";
+import RecipeFinder from "./classes/RecipeFinder";
 
 const dom = {
-  bindEvents(state) {
-    $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
-    $('main').on('click', null, state, dom.handleRecipeCardClicks)
-    $("[data-hook='search--button']").on("click", dom.handleSearchButtonClick);
+  // ---------- on app init ----------
+  init(state) {
+    dom.displayWelcomeMsg(state);
+    dom.createCards(state.recipes, state.currentUser);
+    dom.renderTags(state);
+    dom.bindEvents(state);
   },
 
-  displayWelcomeMsg(state) {
-    const firstName = state.currentUser.name.split(' ', 1);
-    $('#user-name').text(firstName);
+  // ---------- event listeners ----------
+  bindEvents(state) {
+    $(".filter-btn").on("click", () => {
+      dom.handleFilterClick(state);
+    });
+    $("main").on("click", () => {
+      dom.handleRecipeCardClicks(state);
+    });
+    $("[data-hook='button--search']").on("click", e => {
+      dom.handleSearchSubmit(e, state);
+    });
+    $("[data-hook='input--search']").on("submit", "#search", e => {
+      dom.handleSearchSubmit(e, state);
+    });
+    $('[data-hook="button--show-all"]').on("click", e => {
+      dom.handleShowAllClick(e, state);
+    });
+  },
+
+  // ---------- event handlers ----------
+  handleFilterClick(state) {
+    const selectedTags = $(dom.filterTags()).toArray();
+    const tagIds = selectedTags.map(tag => tag.id);
+    const selectedRecipes = dom.filterRecipes(tagIds, state.recipes);
+    dom.clearCards();
+    dom.createCards(selectedRecipes, state.currentUser);
   },
 
   handleRecipeCardClicks(e) {
-    if ($(e.target).hasClass('card-apple-icon') && $(e.target).hasClass('active')) {
+    if (
+      $(e.target).hasClass("card-apple-icon") &&
+      $(e.target).hasClass("active")
+    ) {
       dom.removeFromFavorites(e);
-    } else if ($(e.target).hasClass('card-apple-icon')) {
+    } else if ($(e.target).hasClass("card-apple-icon")) {
       dom.addToFavorites(e);
-    } else if ($(e.target).attr('id') === 'exit-recipe-btn') {
+    } else if ($(e.target).attr("id") === "exit-recipe-btn") {
       dom.exitRecipe();
-    } else if ($(e.target).hasClass('card-photo-preview') || $(e.target).hasClass('text')) {
+    } else if (
+      $(e.target).hasClass("card-photo-preview") ||
+      $(e.target).hasClass("text")
+    ) {
       dom.renderExpandedRecipeCard(e.data);
     }
   },
 
-  toggleApple(e, action) {
-    const imgEnd = action === 'remove' ? '-outline' : ''
-    let cardId = parseInt($(e.target).parent('.recipe-card').attr('id'));
-    let recipe = e.data.recipes.find(recipe => recipe.id === cardId);
-    $(e.target).attr('src', `./images/apple-logo${imgEnd}.png`)
-    $(e.target).toggleClass('active');
-    return recipe;
+  handleSearchSubmit(e, state) {
+    e.preventDefault();
+    const recipeFinder = new RecipeFinder();
+    const query = $("[data-hook='input--search']").val();
+    const queryResults = recipeFinder.searchRecipes(
+      state.ingredients,
+      query,
+      state.recipes
+    );
+
+    dom.clearCards();
+    dom.createCards(queryResults, state.currentUser);
+    $("[data-hook='input--search']").val("");
   },
 
+  handleShowAllClick(e, state) {
+    dom.clearCards();
+    dom.createCards(state.recipes, state.currentUser);
+  },
+
+  // ---------- dom methods ----------
   addToFavorites(e) {
     let recipe = dom.toggleApple(e);
-    e.data.currentUser.addRecipe(recipe, 'favoriteRecipes');
+    e.data.currentUser.addRecipe(recipe, "favoriteRecipes");
   },
 
-  removeFromFavorites(e) {
-    let recipe = dom.toggleApple(e, 'remove');
-    e.data.currentUser.removeRecipe(recipe, 'favoriteRecipes');
+  clearCards() {
+    $("main").empty();
+  },
+
+  createCards(recipeData, userData) {
+    const favorites = userData.favoriteRecipes.map(
+      recipe => new Recipe(recipe)
+    );
+    const favIds = favorites.map(recipe => recipe.id);
+    recipeData.forEach(recipe => {
+      const imgEnd = !favIds.includes(recipe.id) ? "-outline" : "";
+      const recipeCard = `
+        <article class="recipe-card" id=${recipe.id}>
+          <h3 maxlength="40">${recipe.name}</h3>
+          <section class="card-photo-container">
+            <img src=${recipe.image}
+                 class="card-photo-preview"
+                 alt="${recipe.name} recipe"
+                 title="${recipe.name} recipe">
+            <p class="text">Click for Instructions</p>
+          </section>
+          <h4>${recipe.tags.join(", ")}</h4>
+          <img src="../images/apple-logo${imgEnd}.png"
+               alt="unfilled apple icon"
+               class="card-apple-icon">
+          </article>
+          `;
+      $("main").append(recipeCard);
+    });
+  },
+
+  displayWelcomeMsg(state) {
+    const firstName = state.currentUser.name.split(" ", 1);
+    $("#user-name").text(firstName);
+  },
+
+  exitRecipe() {
+    $(".recipe-instructions").toggleClass("is-hidden");
+    $("#overlay").remove();
+  },
+
+  filterRecipes(selectedTags, recipeData) {
+    const filteredRecipes = selectedTags.reduce((list, tag) => {
+      const filtered = recipeData.filter(recipe => {
+        return recipe.tags.includes(tag);
+      });
+      return [...list, ...filtered];
+    }, []);
+
+    return new Set(filteredRecipes);
+  },
+
+  filterTags() {
+    return $(".checked-tag")
+      .toArray()
+      .filter(checkbox => {
+        return $(checkbox).is(":checked");
+      });
   },
 
   matchRecipeIdWithName(e) {
@@ -60,33 +158,39 @@ const dom = {
       return {
         name: match.name,
         amount: ingredient.quantity.amount,
-        unit: ingredient.quantity.unit,
+        unit: ingredient.quantity.unit
       };
     });
     return matched;
   },
 
+  removeFromFavorites(e) {
+    let recipe = dom.toggleApple(e, "remove");
+    e.data.currentUser.removeRecipe(recipe, "favoriteRecipes");
+  },
+
   renderExpandedRecipeCard(data) {
     const matched = dom.matchRecipeIdWithName(e);
-    $('.recipe-instructions').toggleClass('is-hidden');
-    let ingredients = matched.map(ingredient => `${capitalize(ingredient.name)} (${ingredient.amount} ${
-      ingredient.unit})`);
-    let instructions = recipe.getInstructions().map(instr => `<li>${instr.instruction}</li>`)
+    $(".recipe-instructions").toggleClass("is-hidden");
+    let ingredients = matched.map(
+      ingredient =>
+        `${capitalize(ingredient.name)} (${ingredient.amount} ${
+          ingredient.unit
+        })`
+    );
+    let instructions = recipe
+      .getInstructions()
+      .map(instr => `<li>${instr.instruction}</li>`);
     let recipeHTML = `
       <button class="button button--close-recipe" id="exit-recipe-btn">X</button>
       <h3 id="recipe-title">${recipe.name}</h3>
       <h4>Ingredients</h4>
-      <p>${ingredients.join(', ')}</p>
+      <p>${ingredients.join(", ")}</p>
       <h4>Instructions</h4>
-      <ol>${instructions.join('')}</ol>`;
-    $('.recipe-instructions').html(recipeHTML);
-    $('.recipe-instructions').before(`<section id='overlay'></div>`)
-    $('#recipe-title').css('background-image', (`url(${recipe.image})`))
-  },
-
-  exitRecipe() {
-    $('.recipe-instructions').toggleClass('is-hidden');
-    $('#overlay').remove();
+      <ol>${instructions.join("")}</ol>`;
+    $(".recipe-instructions").html(recipeHTML);
+    $(".recipe-instructions").before(`<section id='overlay'></div>`);
+    $("#recipe-title").css("background-image", `url(${recipe.image})`);
   },
 
   renderPantry(pantry) {},
@@ -106,62 +210,17 @@ const dom = {
     });
   },
 
-  filterTags() {
-    return $(".checked-tag")
-      .toArray()
-      .filter(checkbox => {
-        return $(checkbox).is(":checked");
-      });
-  },
-
-  filterRecipes(selectedTags, recipeData) {
-    const filteredRecipes = selectedTags.reduce((list, tag) => {
-      const filtered = recipeData.data.filter(recipe => {
-        return recipe.tags.includes(tag);
-      });
-      return [...list, ...filtered];
-    }, []);
-
-    return new Set(filteredRecipes);
-  },
-
-  createCards(state) {
-    const favorites = state.currentUser.favoriteRecipes.map(recipe => new Recipe(recipe));
-    const favIds = favorites.map(recipe => recipe.id);
-    state.recipes.forEach(recipe => {
-      const imgEnd = !favIds.includes(recipe.id) ? '-outline' : ''
-      const recipeCard = `
-        <article class="recipe-card" id=${recipe.id}>
-          <h3 maxlength="40">${recipe.name}</h3>
-          <section class="card-photo-container">
-            <img src=${recipe.image} class="card-photo-preview" alt="${
-        recipe.name
-      } recipe" title="${recipe.name} recipe">
-            <p class="text">Click for Instructions</p>
-          </section>
-          <h4>${recipe.tags.join(", ")}</h4>
-          <img src="../images/apple-logo${imgEnd}.png" alt="unfilled apple icon" class="card-apple-icon">
-        </article>
-      `;
-      $("main").append(recipeCard);
-    });
-  },
-
-  clearCards() {
-    $("main").html("");
-  },
-
-  handleFilterClick(recipeData) {
-    const selectedTags = $(dom.filterTags()).toArray();
-    const tagIds = selectedTags.map(tag => tag.id);
-    const selectedRecipes = dom.filterRecipes(tagIds, recipeData);
-    dom.clearCards();
-    dom.createCards(selectedRecipes);
-  },
-
-  handleSearchButtonClick(recipeData) {
-    const query = $("[data-hook='input--search']").val();
-    // const list =
+  toggleApple(e, action) {
+    const imgEnd = action === "remove" ? "-outline" : "";
+    let cardId = parseInt(
+      $(e.target)
+        .parent(".recipe-card")
+        .attr("id")
+    );
+    let recipe = e.data.recipes.find(recipe => recipe.id === cardId);
+    $(e.target).attr("src", `./images/apple-logo${imgEnd}.png`);
+    $(e.target).toggleClass("active");
+    return recipe;
   }
 };
 
