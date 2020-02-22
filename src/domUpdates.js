@@ -1,10 +1,10 @@
 // libs
-import $ from "jquery";
-import { capitalize, getTags } from "./lib/utils";
+import $ from 'jquery';
+import { capitalize, getTags } from './lib/utils';
 
 // components
-import Recipe from "./classes/Recipe";
-import RecipeFinder from "./classes/RecipeFinder";
+import Recipe from './classes/Recipe';
+import RecipeFinder from './classes/RecipeFinder';
 
 const dom = {
   // ---------- on app init ----------
@@ -17,19 +17,19 @@ const dom = {
 
   // ---------- event listeners ----------
   bindEvents(state) {
-    $(".filter-btn").on("click", () => {
+    $('.filter-btn').on('click', () => {
       dom.handleFilterClick(state);
     });
-    $("main").on("click", () => {
+    $('main').on('click', () => {
       dom.handleRecipeCardClicks(state);
     });
-    $("[data-hook='button--search']").on("click", e => {
+    $('[data-hook="button--search"]').on('click', e => {
       dom.handleSearchSubmit(e, state);
     });
-    $("[data-hook='input--search']").on("submit", "#search", e => {
+    $('[data-hook="input--search"]').on('submit', '#search', e => {
       dom.handleSearchSubmit(e, state);
     });
-    $('[data-hook="button--show-all"]').on("click", e => {
+    $('[data-hook="button--show-all"]').on('click', e => {
       dom.handleShowAllClick(e, state);
     });
   },
@@ -45,17 +45,17 @@ const dom = {
 
   handleRecipeCardClicks(e) {
     if (
-      $(e.target).hasClass("card-apple-icon") &&
-      $(e.target).hasClass("active")
+      $(e.target).hasClass('card-apple-icon') &&
+      $(e.target).hasClass('active')
     ) {
       dom.removeFromFavorites(e);
-    } else if ($(e.target).hasClass("card-apple-icon")) {
+    } else if ($(e.target).hasClass('card-apple-icon')) {
       dom.addToFavorites(e);
-    } else if ($(e.target).attr("id") === "exit-recipe-btn") {
+    } else if ($(e.target).attr('id') === 'exit-recipe-btn') {
       dom.exitRecipe();
     } else if (
-      $(e.target).hasClass("card-photo-preview") ||
-      $(e.target).hasClass("text")
+      $(e.target).hasClass('card-photo-preview') ||
+      $(e.target).hasClass('text')
     ) {
       dom.renderExpandedRecipeCard(e.data);
     }
@@ -73,7 +73,7 @@ const dom = {
 
     dom.clearCards();
     dom.createCards(queryResults, state.currentUser);
-    $("[data-hook='input--search']").val("");
+    $("[data-hook='input--search']").val('');
   },
 
   handleShowAllClick(e, state) {
@@ -84,11 +84,11 @@ const dom = {
   // ---------- dom methods ----------
   addToFavorites(e) {
     let recipe = dom.toggleApple(e);
-    e.data.currentUser.addRecipe(recipe, "favoriteRecipes");
+    e.data.currentUser.addRecipe(recipe, 'favoriteRecipes');
   },
 
   clearCards() {
-    $("main").empty();
+    $('main').empty();
   },
 
   createCards(recipeData, userData) {
@@ -97,7 +97,7 @@ const dom = {
     );
     const favIds = favorites.map(recipe => recipe.id);
     recipeData.forEach(recipe => {
-      const imgEnd = !favIds.includes(recipe.id) ? "-outline" : "";
+      const imgEnd = !favIds.includes(recipe.id) ? '-outline' : '';
       const recipeCard = `
         <article class="recipe-card" id=${recipe.id}>
           <h3 maxlength="40">${recipe.name}</h3>
@@ -108,24 +108,24 @@ const dom = {
                  title="${recipe.name} recipe">
             <p class="text">Click for Instructions</p>
           </section>
-          <h4>${recipe.tags.join(", ")}</h4>
+          <h4>${recipe.tags.join(', ')}</h4>
           <img src="../images/apple-logo${imgEnd}.png"
                alt="unfilled apple icon"
                class="card-apple-icon">
           </article>
           `;
-      $("main").append(recipeCard);
+      $('main').append(recipeCard);
     });
   },
 
   displayWelcomeMsg(state) {
-    const firstName = state.currentUser.name.split(" ", 1);
-    $("#user-name").text(firstName);
+    const firstName = state.currentUser.name.split(' ', 1);
+    $('#user-name').text(firstName);
   },
 
   exitRecipe() {
-    $(".recipe-instructions").toggleClass("is-hidden");
-    $("#overlay").remove();
+    $('.recipe-instructions').toggleClass('is-hidden');
+    $('#overlay').remove();
   },
 
   filterRecipes(selectedTags, recipeData) {
@@ -140,10 +140,10 @@ const dom = {
   },
 
   filterTags() {
-    return $(".checked-tag")
+    return $('.checked-tag')
       .toArray()
       .filter(checkbox => {
-        return $(checkbox).is(":checked");
+        return $(checkbox).is(':checked');
       });
   },
 
@@ -165,13 +165,13 @@ const dom = {
   },
 
   removeFromFavorites(e) {
-    let recipe = dom.toggleApple(e, "remove");
-    e.data.currentUser.removeRecipe(recipe, "favoriteRecipes");
+    let recipe = dom.toggleApple(e, 'remove');
+    e.data.currentUser.removeRecipe(recipe, 'favoriteRecipes');
   },
 
   renderExpandedRecipeCard(data) {
     const matched = dom.matchRecipeIdWithName(e);
-    $(".recipe-instructions").toggleClass("is-hidden");
+    $('.recipe-instructions').toggleClass('is-hidden');
     let ingredients = matched.map(
       ingredient =>
         `${capitalize(ingredient.name)} (${ingredient.amount} ${
@@ -185,12 +185,12 @@ const dom = {
       <button class="button button--close-recipe" id="exit-recipe-btn">X</button>
       <h3 id="recipe-title">${recipe.name}</h3>
       <h4>Ingredients</h4>
-      <p>${ingredients.join(", ")}</p>
+      <p>${ingredients.join(', ')}</p>
       <h4>Instructions</h4>
-      <ol>${instructions.join("")}</ol>`;
-    $(".recipe-instructions").html(recipeHTML);
-    $(".recipe-instructions").before(`<section id='overlay'></div>`);
-    $("#recipe-title").css("background-image", `url(${recipe.image})`);
+      <ol>${instructions.join('')}</ol>`;
+    $('.recipe-instructions').html(recipeHTML);
+    $('.recipe-instructions').before(`<section id='overlay'></div>`);
+    $('#recipe-title').css('background-image', `url(${recipe.image})`);
   },
 
   renderPantry(pantry) {},
@@ -206,20 +206,20 @@ const dom = {
           <label for="${tag}">${upperCaseTag}</label>
         </li>
       `;
-      $(".tag-list").append(tagHtml);
+      $('.tag-list').append(tagHtml);
     });
   },
 
   toggleApple(e, action) {
-    const imgEnd = action === "remove" ? "-outline" : "";
+    const imgEnd = action === 'remove' ? '-outline' : '';
     let cardId = parseInt(
       $(e.target)
-        .parent(".recipe-card")
-        .attr("id")
+        .parent('.recipe-card')
+        .attr('id')
     );
     let recipe = e.data.recipes.find(recipe => recipe.id === cardId);
-    $(e.target).attr("src", `./images/apple-logo${imgEnd}.png`);
-    $(e.target).toggleClass("active");
+    $(e.target).attr('src', `./images/apple-logo${imgEnd}.png`);
+    $(e.target).toggleClass('active');
     return recipe;
   }
 };

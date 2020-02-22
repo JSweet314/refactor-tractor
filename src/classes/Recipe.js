@@ -17,14 +17,14 @@ class Recipe extends RecipeFinder {
       if (match) {
         return ingredient.quantity.amount * match.estimatedCostInCents;
       } else {
-        throw new Error('Ingredient cost not found')
+        throw new Error('Ingredient cost not found');
       }
-    })
+    });
     const totalCost = ingredientCosts.reduce((total, cost) => {
       return total + cost;
-    }, 0)
+    }, 0);
     const costInDollars = totalCost / 100;
-    return `$${costInDollars}`
+    return `$${costInDollars}`;
   }
   getInstructions() {
     return this.instructions;

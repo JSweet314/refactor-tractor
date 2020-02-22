@@ -1,5 +1,5 @@
-import RecipeFinder from "./RecipeFinder";
-import { BASE, USER_ENDPOINT } from "../constants/constants";
+import RecipeFinder from './RecipeFinder';
+import { BASE, USER_ENDPOINT } from '../constants/constants';
 
 class Pantry extends RecipeFinder {
   constructor(contents) {
@@ -54,9 +54,9 @@ class Pantry extends RecipeFinder {
 
     window
       .fetch(BASE + USER_ENDPOINT, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(modification)
       })

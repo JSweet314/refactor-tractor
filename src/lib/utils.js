@@ -3,7 +3,7 @@ import {
   USER_ENDPOINT,
   RECIPE_ENDPOINT,
   INGREDIENT_ENDPOINT
-} from "../constants/constants";
+} from '../constants/constants';
 
 export const capitalize = elem => {
   return elem.charAt(0).toUpperCase() + elem.substring(1);

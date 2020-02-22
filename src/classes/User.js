@@ -1,6 +1,5 @@
-import Pantry from "./Pantry";
+import Pantry from './Pantry';
 import RecipeFinder from './RecipeFinder';
-
 
 class User extends RecipeFinder {
   constructor(user) {
@@ -8,8 +7,10 @@ class User extends RecipeFinder {
     this.id = user.id;
     this.name = user.name;
     this.pantry = new Pantry(user.pantry);
-    this.favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-    this.recipesToCook = JSON.parse(localStorage.getItem('recipesToCook')) || [];
+    this.favoriteRecipes =
+      JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    this.recipesToCook =
+      JSON.parse(localStorage.getItem('recipesToCook')) || [];
   }
 
   addRecipe(recipe, list) {
