@@ -19,6 +19,7 @@ const dom = {
     $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
     $('main').on('click', null, state, dom.handleRecipeCardClicks);
     $('.pantry-btn').on('click', null, state, dom.findPantryInfo);
+    $('.show-pantry-recipes-btn').on('click', null, state, dom.findCheckedPantryBoxes);
     $("[data-hook='search--button']").on("click", dom.handleSearchButtonClick);
   },
 
@@ -110,10 +111,43 @@ const dom = {
   renderPantry(pantry) {
     $('.drop-menu').toggleClass('is-hidden');
     pantry.forEach(ingredient => {
-      console.log(ingredient)
       let ingredientHtml = `<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
       <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`;
       $('.pantry-list').prepend(ingredientHtml);
+    });
+  },
+
+  filterPantry() {
+    return $(".pantry-checkbox")
+      .toArray()
+      .filter(checkbox => {
+        return $(checkbox).is(":checked");
+      });
+  },
+
+  findCheckedPantryBoxes() {
+    const selectedIngredients = $(dom.filterPantry()).toArray();
+    console.log(selectedIngredients);
+    // showAllRecipes();
+    if (selectedIngredients.length > 0) {
+      dom.findRecipesWithCheckedIngredients(selectedIngredients);
+    }
+  },
+
+  findRecipesWithCheckedIngredients(selected) {
+    let recipeChecker = (arr, target) => target.every(v => arr.includes(v));
+    let ingredientNames = selected.map(item => {
+      return item.id;
+    });
+    recipes.forEach(recipe => {
+      let allRecipeIngredients = [];
+      recipe.ingredients.forEach(ingredient => {
+        allRecipeIngredients.push(ingredient.name);
+      });
+      if (!recipeChecker(allRecipeIngredients, ingredientNames)) {
+        let domRecipe = document.getElementById(`${recipe.id}`);
+        domRecipe.style.display = "none";
+      }
     });
   },
 
