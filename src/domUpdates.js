@@ -98,17 +98,16 @@ const dom = {
       let itemInfo = state.data.ingredients.find(ingredient => {
         return item.ingredient === ingredient.id
       })
-      console.log(itemInfo)
-      // let itemInfo = item.ingredient === state.data.ingredients.id;
       // console.log(itemInfo)
-      // let itemInfo = item.find(ingredient => {
-      //   return ingredient.id === item.ingredient;
+      let originalIngredient = state.data.currentUser.pantry.contents.find(pantryIngredient => {
+        // console.log(pantryIngredient)
+        if (itemInfo) {
+          return pantryIngredient.ingredient === itemInfo.id;
+        }
       });
-      // let originalIngredient = pantryInfo.find(ingredient => {
-      //   if (itemInfo) {
-      //     return ingredient.name === itemInfo.name;
-      //   }
-      // });
+      console.log(originalIngredient)
+      console.log(itemInfo)
+      });
       // if (itemInfo && originalIngredient) {
       //   originalIngredient.count += item.amount;
       // } else if (itemInfo) {
