@@ -1,4 +1,5 @@
 import RecipeFinder from "./RecipeFinder";
+import { BASE, USER_ENDPOINT } from "../constants/constants";
 
 class Pantry extends RecipeFinder {
   constructor(contents) {
@@ -50,10 +51,9 @@ class Pantry extends RecipeFinder {
       ingredientID,
       ingredientModification: amount
     };
-    const base = "https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/";
-    const userEndpoint = "users/wcUsersData";
+
     window
-      .fetch(base + userEndpoint, {
+      .fetch(BASE + USER_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

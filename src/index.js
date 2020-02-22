@@ -1,5 +1,4 @@
 // ---------- libs ----------
-import $ from "jquery";
 import {
   getIngredients,
   getRandomNumber,
