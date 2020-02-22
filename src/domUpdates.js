@@ -1,52 +1,60 @@
 import $ from "jquery";
 import Recipe from "./classes/Recipe";
 
-import {
-  capitalize,
-  getTags
-} from "./lib/utils";
+import { capitalize, getTags } from "./lib/utils";
 
 const dom = {
   bindEvents(state) {
     $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
-    $('main').on('click', null, state, dom.handleRecipeCardClicks)
-    $("[data-hook='search--button']").on("click", dom.handleSearchButtonClick);
+    $("main").on("click", null, state, dom.handleRecipeCardClicks);
+    $("[data-hook='search--button']").on("click", dom.handleSearchSubmit);
+    $("[data-hook='search--button']").on("submit", dom.handleSearchSubmit);
   },
 
   displayWelcomeMsg(state) {
-    const firstName = state.currentUser.name.split(' ', 1);
-    $('#user-name').text(firstName);
+    const firstName = state.currentUser.name.split(" ", 1);
+    $("#user-name").text(firstName);
   },
 
   handleRecipeCardClicks(e) {
-    if ($(e.target).hasClass('card-apple-icon') && $(e.target).hasClass('active')) {
+    if (
+      $(e.target).hasClass("card-apple-icon") &&
+      $(e.target).hasClass("active")
+    ) {
       dom.removeFromFavorites(e);
-    } else if ($(e.target).hasClass('card-apple-icon')) {
+    } else if ($(e.target).hasClass("card-apple-icon")) {
       dom.addToFavorites(e);
-    } else if ($(e.target).attr('id') === 'exit-recipe-btn') {
+    } else if ($(e.target).attr("id") === "exit-recipe-btn") {
       dom.exitRecipe();
-    } else if ($(e.target).hasClass('card-photo-preview') || $(e.target).hasClass('text')) {
+    } else if (
+      $(e.target).hasClass("card-photo-preview") ||
+      $(e.target).hasClass("text")
+    ) {
       dom.renderExpandedRecipeCard(e.data);
     }
   },
 
   toggleApple(e, action) {
-    const imgEnd = action === 'remove' ? '-outline' : ''
-    let cardId = parseInt($(e.target).parent('.recipe-card').attr('id'));
+    const imgEnd = action === "remove" ? "-outline" : "";
+    let cardId = parseInt(
+      $(e.target)
+        .parent(".recipe-card")
+        .attr("id")
+    );
     let recipe = e.data.recipes.find(recipe => recipe.id === cardId);
-    $(e.target).attr('src', `./images/apple-logo${imgEnd}.png`)
-    $(e.target).toggleClass('active');
+    $(e.target).attr("src", `./images/apple-logo${imgEnd}.png`);
+    $(e.target).toggleClass("active");
     return recipe;
   },
 
   addToFavorites(e) {
     let recipe = dom.toggleApple(e);
-    e.data.currentUser.addRecipe(recipe, 'favoriteRecipes');
+    e.data.currentUser.addRecipe(recipe, "favoriteRecipes");
   },
 
   removeFromFavorites(e) {
-    let recipe = dom.toggleApple(e, 'remove');
-    e.data.currentUser.removeRecipe(recipe, 'favoriteRecipes');
+    let recipe = dom.toggleApple(e, "remove");
+    e.data.currentUser.removeRecipe(recipe, "favoriteRecipes");
   },
 
   matchRecipeIdWithName(e) {
@@ -60,7 +68,7 @@ const dom = {
       return {
         name: match.name,
         amount: ingredient.quantity.amount,
-        unit: ingredient.quantity.unit,
+        unit: ingredient.quantity.unit
       };
     });
     return matched;
@@ -68,25 +76,31 @@ const dom = {
 
   renderExpandedRecipeCard(data) {
     const matched = dom.matchRecipeIdWithName(e);
-    $('.recipe-instructions').toggleClass('is-hidden');
-    let ingredients = matched.map(ingredient => `${capitalize(ingredient.name)} (${ingredient.amount} ${
-      ingredient.unit})`);
-    let instructions = recipe.getInstructions().map(instr => `<li>${instr.instruction}</li>`)
+    $(".recipe-instructions").toggleClass("is-hidden");
+    let ingredients = matched.map(
+      ingredient =>
+        `${capitalize(ingredient.name)} (${ingredient.amount} ${
+          ingredient.unit
+        })`
+    );
+    let instructions = recipe
+      .getInstructions()
+      .map(instr => `<li>${instr.instruction}</li>`);
     let recipeHTML = `
       <button class="button button--close-recipe" id="exit-recipe-btn">X</button>
       <h3 id="recipe-title">${recipe.name}</h3>
       <h4>Ingredients</h4>
-      <p>${ingredients.join(', ')}</p>
+      <p>${ingredients.join(", ")}</p>
       <h4>Instructions</h4>
-      <ol>${instructions.join('')}</ol>`;
-    $('.recipe-instructions').html(recipeHTML);
-    $('.recipe-instructions').before(`<section id='overlay'></div>`)
-    $('#recipe-title').css('background-image', (`url(${recipe.image})`))
+      <ol>${instructions.join("")}</ol>`;
+    $(".recipe-instructions").html(recipeHTML);
+    $(".recipe-instructions").before(`<section id='overlay'></div>`);
+    $("#recipe-title").css("background-image", `url(${recipe.image})`);
   },
 
   exitRecipe() {
-    $('.recipe-instructions').toggleClass('is-hidden');
-    $('#overlay').remove();
+    $(".recipe-instructions").toggleClass("is-hidden");
+    $("#overlay").remove();
   },
 
   renderPantry(pantry) {},
@@ -126,21 +140,26 @@ const dom = {
   },
 
   createCards(state) {
-    const favorites = state.currentUser.favoriteRecipes.map(recipe => new Recipe(recipe));
+    const favorites = state.currentUser.favoriteRecipes.map(
+      recipe => new Recipe(recipe)
+    );
     const favIds = favorites.map(recipe => recipe.id);
     state.recipes.forEach(recipe => {
-      const imgEnd = !favIds.includes(recipe.id) ? '-outline' : ''
+      const imgEnd = !favIds.includes(recipe.id) ? "-outline" : "";
       const recipeCard = `
         <article class="recipe-card" id=${recipe.id}>
           <h3 maxlength="40">${recipe.name}</h3>
           <section class="card-photo-container">
-            <img src=${recipe.image} class="card-photo-preview" alt="${
-        recipe.name
-      } recipe" title="${recipe.name} recipe">
+            <img src=${recipe.image}
+                 class="card-photo-preview"
+                 alt="${recipe.name} recipe"
+                 title="${recipe.name} recipe">
             <p class="text">Click for Instructions</p>
           </section>
           <h4>${recipe.tags.join(", ")}</h4>
-          <img src="../images/apple-logo${imgEnd}.png" alt="unfilled apple icon" class="card-apple-icon">
+          <img src="../images/apple-logo${imgEnd}.png"
+               alt="unfilled apple icon"
+               class="card-apple-icon">
         </article>
       `;
       $("main").append(recipeCard);
@@ -159,10 +178,35 @@ const dom = {
     dom.createCards(selectedRecipes);
   },
 
-  handleSearchButtonClick(recipeData) {
+  handleSearchButtonClick(e) {
+    e.preventDefault();
     const query = $("[data-hook='input--search']").val();
-    // const list =
+    //search recipes
   }
 };
 
 export default dom;
+
+function searchRecipes() {
+  showAllRecipes();
+  let searchedRecipes = recipeData.filter(recipe => {
+    return recipe.name.toLowerCase().includes(searchInput.value.toLowerCase());
+  });
+  filterNonSearched(createRecipeObject(searchedRecipes));
+}
+
+// TODO move this method to the DOM? Was in Pantry
+// return namedIngredients.map(ingr => {
+//   if (ingr.amount < 0) {
+//     const message = `You need ${Math.abs(ingr.amount)} more ${
+//       ingr.unit
+//     } of ${ingr.name}.
+//     It will cost you $${(Math.abs(ingr.amount) * ingr.cost) / 100}`;
+//     console.log(message);
+//     return message;
+//   } else {
+//     const message = `You have plenty of ${ingr.name}`;
+//     console.log(message);
+//     return message;
+//   }
+// });

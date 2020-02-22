@@ -1,14 +1,3 @@
-import $ from "jquery";
-// import users from './data/users-data';
-// import recipeData from  './data/recipe-data';
-// import ingredientData from './data/ingredient-data';
-
-import "./css/base.scss";
-import "./css/styles.scss";
-
-import User from "./user";
-import Recipe from "./recipe";
-
 let allRecipesBtn = document.querySelector(".show-all-btn");
 let fullRecipeInfo = document.querySelector(".recipe-instructions");
 let menuOpen = false;
@@ -28,11 +17,8 @@ showPantryRecipes.addEventListener("click", findCheckedPantryBoxes);
 searchForm.addEventListener("submit", pressEnterSearch);
 
 findPantryInfo();
-
 // this function was originally invoked inside of the method that we have named filterTags()
 findTaggedRecipes(selectedTags);
-
-// FAVORITE RECIPE FUNCTIONALITY
 
 function showSavedRecipes() {
   let unsavedRecipes = recipes.filter(recipe => {
@@ -54,20 +40,6 @@ function showMyRecipesBanner() {
 function showWelcomeBanner() {
   document.querySelector(".welcome-msg").style.display = "flex";
   document.querySelector(".my-recipes-banner").style.display = "none";
-}
-
-// SEARCH RECIPES
-function pressEnterSearch(event) {
-  event.preventDefault();
-  searchRecipes();
-}
-
-function searchRecipes() {
-  showAllRecipes();
-  let searchedRecipes = recipeData.filter(recipe => {
-    return recipe.name.toLowerCase().includes(searchInput.value.toLowerCase());
-  });
-  filterNonSearched(createRecipeObject(searchedRecipes));
 }
 
 function toggleMenu() {

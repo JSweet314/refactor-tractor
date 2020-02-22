@@ -1,4 +1,4 @@
-import RecipeFinder from './RecipeFinder';
+import RecipeFinder from "./RecipeFinder";
 
 class Pantry extends RecipeFinder {
   constructor(contents) {
@@ -31,6 +31,7 @@ class Pantry extends RecipeFinder {
         unit: ingr.quantity.unit
       };
     });
+
     const namedIngredients = missingAmounts.map(ingredient => {
       let match = data.find(ingr => ingr.id === ingredient.id);
       return {
@@ -41,45 +42,28 @@ class Pantry extends RecipeFinder {
       };
     });
     return namedIngredients;
-
-    // TODO move this method to the DOM?
-    // return namedIngredients.map(ingr => {
-    //   if (ingr.amount < 0) {
-    //     const message = `You need ${Math.abs(ingr.amount)} more ${
-    //       ingr.unit
-    //     } of ${ingr.name}.
-    //     It will cost you $${(Math.abs(ingr.amount) * ingr.cost) / 100}`;
-    //     console.log(message);
-    //     return message;
-    //   } else {
-    //     const message = `You have plenty of ${ingr.name}`;
-    //     console.log(message);
-    //     return message;
-    //   }
-    // });
   }
 
   updateIngredients(ingredientID, amount, id) {
     const modification = {
-        userID: id,
-        ingredientID: ingredientID,
-        ingredientModification: amount
-      }
-      const base = 'https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/';
-      const userEndpoint = 'users/wcUsersData'
-      window.fetch(base + userEndpoint, {
-        method: 'POST',
+      userID: id,
+      ingredientID,
+      ingredientModification: amount
+    };
+    const base = "https://fe-apps.herokuapp.com/api/v1/whats-cookin/1911/";
+    const userEndpoint = "users/wcUsersData";
+    window
+      .fetch(base + userEndpoint, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(modification)
       })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(err => console.log(err.message))
-    }
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(err => console.log(err.message));
   }
-
-
+}
 
 export default Pantry;
