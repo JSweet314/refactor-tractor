@@ -114,6 +114,7 @@ const dom = {
   },
 
   renderPantry() {
+    $('.drop-menu').removeClass('is-hidden');
     // $('.pantry-list').html(`<li><input type="checkbox" class="pantry-checkbox" id="${ingredient.name}">
     // //       <label for="${ingredient.name}">${ingredient.name}, ${ingredient.count}</label></li>`);
     $('.pantry-list').html(`<li><input type="checkbox" class="pantry-checkbox" id="1">
