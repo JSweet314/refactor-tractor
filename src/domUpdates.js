@@ -103,7 +103,8 @@ const dom = {
         pantryInfo.push({ name: itemInfo.name, count: item.amount });
       }
     })
-    dom.renderPantry(pantryInfo);
+    dom.renderPantry(pantryInfo.sort((a, b) =>
+      b.name.localeCompare(a.name)));
   },
 
   renderPantry(pantry) {
