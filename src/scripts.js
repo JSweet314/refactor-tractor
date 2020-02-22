@@ -52,14 +52,6 @@ function toggleMenu() {
   }
 }
 
-function showAllRecipes() {
-  // recipes.forEach(recipe => {
-  //   let domRecipe = document.getElementById(`${recipe.id}`);
-  //   domRecipe.style.display = "block";
-  // });
-  showWelcomeBanner();
-}
-
 // CREATE AND USE PANTRY
 function findPantryInfo() {
   user.pantry.forEach(item => {

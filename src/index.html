@@ -29,7 +29,7 @@
                placeholder="Search recipes..."
                data-hook="input--search"></input>
         <button class="button button--search button--nav"
-                type="button"
+                type="submit"
                 name="button"
                 aria-label="Submit recipe search"
                 aria-controls="search-input"
@@ -49,7 +49,8 @@
     </header>
     <section class="banner banner__image banner--recipes">
       <h1>Welcome <span id="user-name"></span></h1>
-      <button class="button button--show-all">Show All Recipes</button>
+      <button class="button button--show-all"
+              data-hook="button--show-all">Show All Recipes</button>
     </section>
     <section class="drop-menu is-hidden">
       <h2>My Pantry</h2>

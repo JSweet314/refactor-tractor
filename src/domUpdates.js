@@ -1,14 +1,33 @@
+// libs
 import $ from "jquery";
-import Recipe from "./classes/Recipe";
-
 import { capitalize, getTags } from "./lib/utils";
+
+// components
+import Recipe from "./classes/Recipe";
+import RecipeFinder from "./classes/RecipeFinder";
 
 const dom = {
   bindEvents(state) {
     $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
     $("main").on("click", null, state, dom.handleRecipeCardClicks);
-    $("[data-hook='search--button']").on("click", dom.handleSearchSubmit);
-    $("[data-hook='search--button']").on("submit", dom.handleSearchSubmit);
+    $("[data-hook='button--search']").on(
+      "click",
+      null,
+      state,
+      dom.handleSearchSubmit
+    );
+    $("[data-hook='input--search']").on(
+      "submit",
+      "#search",
+      state,
+      dom.handleSearchSubmit
+    );
+    $('[data-hook="button--show-all"]').on(
+      "click",
+      null,
+      state,
+      dom.handleShowAllClick
+    );
   },
 
   displayWelcomeMsg(state) {
@@ -178,22 +197,35 @@ const dom = {
     dom.createCards(selectedRecipes);
   },
 
-  handleSearchButtonClick(e) {
+  handleSearchSubmit(e) {
     e.preventDefault();
+    const recipeFinder = new RecipeFinder();
     const query = $("[data-hook='input--search']").val();
-    //search recipes
+    const queryResults = recipeFinder.searchRecipes(
+      e.data.ingredients,
+      query,
+      e.data.recipes
+    );
+    dom.clearCards();
+    dom.createCards(queryResults);
+    $("[data-hook='input--search']").val("");
+  },
+
+  handleShowAllClick(state) {
+    dom.clearCards();
+    dom.createCards(state);
   }
 };
 
 export default dom;
 
-function searchRecipes() {
-  showAllRecipes();
-  let searchedRecipes = recipeData.filter(recipe => {
-    return recipe.name.toLowerCase().includes(searchInput.value.toLowerCase());
-  });
-  filterNonSearched(createRecipeObject(searchedRecipes));
-}
+// function searchRecipes() {
+//   showAllRecipes();
+//   let searchedRecipes = recipeData.filter(recipe => {
+//     return recipe.name.toLowerCase().includes(searchInput.value.toLowerCase());
+//   });
+//   filterNonSearched(createRecipeObject(searchedRecipes));
+// }
 
 // TODO move this method to the DOM? Was in Pantry
 // return namedIngredients.map(ingr => {
