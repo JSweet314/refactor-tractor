@@ -7,6 +7,13 @@ import Recipe from "./classes/Recipe";
 import RecipeFinder from "./classes/RecipeFinder";
 
 const dom = {
+  init(state) {
+    dom.displayWelcomeMsg(state);
+    dom.createCards(state);
+    dom.renderTags(state);
+    dom.bindEvents(state);
+  },
+
   bindEvents(state) {
     $(".filter-btn").on("click", null, state.recipes, dom.handleFilterClick);
     $("main").on("click", null, state, dom.handleRecipeCardClicks);
@@ -158,12 +165,13 @@ const dom = {
     return new Set(filteredRecipes);
   },
 
-  createCards(state) {
-    const favorites = state.currentUser.favoriteRecipes.map(
+  createCards(e) {
+    console.log(e.data);
+    const favorites = e.data.currentUser.favoriteRecipes.map(
       recipe => new Recipe(recipe)
     );
     const favIds = favorites.map(recipe => recipe.id);
-    state.recipes.forEach(recipe => {
+    e.data.recipes.forEach(recipe => {
       const imgEnd = !favIds.includes(recipe.id) ? "-outline" : "";
       const recipeCard = `
         <article class="recipe-card" id=${recipe.id}>
@@ -206,6 +214,7 @@ const dom = {
       query,
       e.data.recipes
     );
+
     dom.clearCards();
     dom.createCards(queryResults);
     $("[data-hook='input--search']").val("");
@@ -218,14 +227,6 @@ const dom = {
 };
 
 export default dom;
-
-// function searchRecipes() {
-//   showAllRecipes();
-//   let searchedRecipes = recipeData.filter(recipe => {
-//     return recipe.name.toLowerCase().includes(searchInput.value.toLowerCase());
-//   });
-//   filterNonSearched(createRecipeObject(searchedRecipes));
-// }
 
 // TODO move this method to the DOM? Was in Pantry
 // return namedIngredients.map(ingr => {

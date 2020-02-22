@@ -46,8 +46,5 @@ Promise.all([users, recipes, ingredients]).then(data => {
   state.recipes = recipes;
   state.ingredients = ingredients;
 
-  dom.displayWelcomeMsg(state);
-  dom.createCards();
-  dom.renderTags(state);
-  dom.bindEvents(state);
+  dom.init(state);
 });
